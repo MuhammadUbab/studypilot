@@ -53,7 +53,7 @@ class OpenRouterService
             }
             $messages[] = ['role' => 'user', 'content' => $prompt];
 
-            $response = Http::withHeaders([
+            $response = Http::timeout(15)->withHeaders([
                 'Authorization' => 'Bearer ' . $this->apiKey,
                 'HTTP-Referer' => 'http://localhost:8000',
                 'X-Title' => 'StudyPilot',

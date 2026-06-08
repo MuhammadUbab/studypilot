@@ -195,13 +195,15 @@ Kembalikan HANYA dalam format JSON valid dengan skema berikut:
             $jsonData = $this->generateMockPlannerData($tasks);
         }
 
+        // Dapatkan semua ID tugas milik user untuk divalidasi secara in-memory (menghindari N+1 query ke Supabase)
+        $userTaskIds = Task::where('user_id', $user->id)->pluck('id')->toArray();
+
         // Simpan sesi belajar ke database
         foreach ($jsonData['sessions'] as $sessionData) {
             // Pastikan task_id yang dirujuk valid milik user
             $taskId = $sessionData['task_id'] ?? null;
-            if ($taskId) {
-                $exists = Task::where('id', $taskId)->where('user_id', $user->id)->exists();
-                if (!$exists) $taskId = null;
+            if ($taskId && !in_array($taskId, $userTaskIds)) {
+                $taskId = null;
             }
 
             StudySession::create([
