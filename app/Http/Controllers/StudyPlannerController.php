@@ -220,6 +220,30 @@ Kembalikan HANYA dalam format JSON valid dengan skema berikut:
         return redirect()->route('study-planner.index')->with('success', 'Rencana belajar AI mingguan berhasil dibuat dan disimpan! 🚀');
     }
 
+    public function clear()
+    {
+        $userId = Auth::id();
+        
+        $countBefore = StudySession::where('user_id', Auth::id())->count();
+        Log::info("Clearing study planner for user $userId. Sessions count before: $countBefore");
+        
+        try {
+            StudySession::where('user_id', Auth::id())->delete();
+            $countAfter = StudySession::where('user_id', Auth::id())->count();
+            Log::info("Successfully cleared study planner for user $userId. Sessions count after: $countAfter");
+            
+            if ($countAfter > 0) {
+                Log::error("Failed to fully clear study planner for user $userId. Remaining: $countAfter");
+                return redirect()->route('study-planner.index')->with('error', 'Gagal membersihkan seluruh jadwal belajar.');
+            }
+            
+            return redirect()->route('study-planner.index')->with('success', 'Seluruh jadwal belajar berhasil dibersihkan! 🧹');
+        } catch (\Exception $e) {
+            Log::error("Exception occurred while clearing study planner for user $userId: " . $e->getMessage());
+            return redirect()->route('study-planner.index')->with('error', 'Terjadi kesalahan sistem saat membersihkan jadwal.');
+        }
+    }
+
     protected function generateMockPlannerData($tasks)
     {
         $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];

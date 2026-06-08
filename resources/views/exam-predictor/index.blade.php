@@ -38,7 +38,7 @@
                                 </span>
                                 <span class="text-secondary small">{{ $pred->created_at->diffForHumans() }}</span>
                             </div>
-                            <h5 class="text-white mb-3 text-truncate">{{ $pred->judul }}</h5>
+                            <h5 class="mb-3 text-truncate">{{ $pred->judul }}</h5>
                             
                             <div class="d-flex gap-4 text-secondary small mb-4">
                                 <span><i class="fa-solid fa-list me-1"></i> {{ count($pred->hasil_prediksi['topics'] ?? []) }} Topik</span>
@@ -68,7 +68,7 @@
 <!-- Modal Prediksi Ujian Baru -->
 <div class="modal fade" id="runPredictorModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-dark border-secondary text-white" style="border-radius:16px;">
+        <div class="modal-content bg-dark border-secondary text-heading" style="border-radius:16px;">
             <div class="modal-header border-secondary">
                 <h5 class="modal-title">Analisis Prediksi Ujian AI</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -78,17 +78,17 @@
                     @csrf
                     <div class="mb-3">
                         <label for="examTitle" class="form-label">Nama Mata Kuliah / Judul Ujian</label>
-                        <input type="text" class="form-control bg-dark border-secondary text-white" id="examTitle" name="judul" required placeholder="Contoh: UTS Aljabar Linear">
+                        <input type="text" class="form-control bg-dark border-secondary text-heading" id="examTitle" name="judul" required placeholder="Contoh: UTS Aljabar Linear">
                     </div>
                     
                     <div class="mb-3">
                         <label for="examGuidelines" class="form-label">Silabus / Kisi-Kisi Ujian</label>
-                        <textarea class="form-control bg-dark border-secondary text-white" id="examGuidelines" name="kisi_kisi" rows="4" required placeholder="Tuliskan daftar bab, materi pokok, atau instruksi kisi-kisi dari dosen..."></textarea>
+                        <textarea class="form-control bg-dark border-secondary text-heading" id="examGuidelines" name="kisi_kisi" rows="4" required placeholder="Tuliskan daftar bab, materi pokok, atau instruksi kisi-kisi dari dosen..."></textarea>
                     </div>
 
                     <div class="mb-3">
                         <label for="examOldFile" class="form-label">Upload PDF Soal Ujian Lama (Opsional)</label>
-                        <input type="file" class="form-control bg-dark border-secondary text-white" id="examOldFile" name="soal_lama_file" accept=".pdf">
+                        <input type="file" class="form-control bg-dark border-secondary text-heading" id="examOldFile" name="soal_lama_file" accept=".pdf">
                         <span class="text-secondary small mt-1 d-block">AI akan mengekstrak soal lama untuk membandingkan pola.</span>
                     </div>
 

@@ -15,7 +15,7 @@
     <div class="auth-container py-5">
         <div class="glass-card auth-card shadow-lg" style="max-width:550px;">
             <div class="text-center mb-4">
-                <a href="{{ route('landing') }}" class="text-decoration-none fs-2 fw-bold text-white">
+                <a href="{{ route('landing') }}" class="text-decoration-none fs-2 fw-bold text-heading">
                     <i class="fa-solid fa-paper-plane me-2" style="color: var(--color-primary);"></i>StudyPilot
                 </a>
                 <p class="text-secondary mt-2">Buat akun untuk memulai belajar pintar</p>

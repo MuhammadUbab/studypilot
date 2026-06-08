@@ -159,7 +159,7 @@
                 <div class="glass-card stat-card h-100 d-flex flex-column">
                     <h5 class="text-secondary text-uppercase tracking-wider">Free</h5>
                     <div class="my-3">
-                        <span class="display-5 fw-bold text-white">Rp0</span>
+                        <span class="display-5 fw-bold text-heading">Rp0</span>
                     </div>
                     <p class="text-secondary mb-4">Solusi dasar untuk mencoba sistem manajemen akademik.</p>
                     <ul class="list-unstyled mb-5 flex-grow-1">
@@ -181,7 +181,7 @@
                         <span class="badge bg-primary rounded-pill px-3 py-1">Paling Populer</span>
                     </div>
                     <div class="my-3">
-                        <span class="display-5 fw-bold text-white">Rp24.900</span>
+                        <span class="display-5 fw-bold text-heading">Rp24.900</span>
                         <span class="text-secondary">/bulan</span>
                     </div>
                     <p class="text-secondary mb-4">Semua fitur esensial yang dibutuhkan mahasiswa produktif.</p>
@@ -201,7 +201,7 @@
                 <div class="glass-card stat-card h-100 d-flex flex-column">
                     <h5 class="text-secondary text-uppercase tracking-wider">Premium Plus</h5>
                     <div class="my-3">
-                        <span class="display-5 fw-bold text-white">Rp39.900</span>
+                        <span class="display-5 fw-bold text-heading">Rp39.900</span>
                         <span class="text-secondary">/bulan</span>
                     </div>
                     <p class="text-secondary mb-4">Maksimalkan performa ujian Anda dengan fitur prediksi canggih.</p>
@@ -229,7 +229,7 @@
                 <div class="accordion accordion-flush" id="faqAccordion">
                     <div class="accordion-item bg-transparent border-bottom border-secondary-subtle">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed bg-transparent text-white py-4 fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            <button class="accordion-button collapsed bg-transparent text-heading py-4 fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
                                 Apakah kuis otomatis yang dihasilkan AI relevan dengan materi saya?
                             </button>
                         </h2>
@@ -241,7 +241,7 @@
                     </div>
                     <div class="accordion-item bg-transparent border-bottom border-secondary-subtle">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed bg-transparent text-white py-4 fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            <button class="accordion-button collapsed bg-transparent text-heading py-4 fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
                                 Bagaimana cara AI memprediksi materi ujian?
                             </button>
                         </h2>
@@ -253,7 +253,7 @@
                     </div>
                     <div class="accordion-item bg-transparent border-bottom border-secondary-subtle">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed bg-transparent text-white py-4 fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            <button class="accordion-button collapsed bg-transparent text-heading py-4 fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
                                 Apakah platform ini berbayar?
                             </button>
                         </h2>
@@ -273,7 +273,7 @@
         <div class="container">
             <div class="row align-items-center justify-content-between">
                 <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                    <span class="fs-4 fw-bold text-white">
+                    <span class="fs-4 fw-bold text-heading">
                         <i class="fa-solid fa-paper-plane me-2 text-primary"></i>StudyPilot
                     </span>
                     <p class="text-secondary mt-2 mb-0">© 2026 StudyPilot. Seluruh Hak Cipta Dilindungi.</p>

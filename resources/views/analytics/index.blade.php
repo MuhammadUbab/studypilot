@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row mb-5 align-items-center">
         <div class="col-md-8">
-            <h1 class="fw-bold text-white mb-1">Academic Analytics & Progress Tracker</h1>
+            <h1 class="fw-bold mb-1">Academic Analytics & Progress Tracker</h1>
             <p class="text-secondary mb-0">Statistik produktivitas, pencapaian kuis, jam belajar, dan visualisasi performa akademik Anda secara lengkap.</p>
         </div>
         <div class="col-md-4 text-md-end mt-3 mt-md-0">
@@ -53,7 +53,7 @@
         <div class="col-md-6">
             <div class="glass-card p-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-bold mb-0 text-white"><i class="fa-solid fa-calendar-check text-primary me-2"></i>Kepatuhan Jadwal (Study Planner)</h5>
+                    <h5 class="fw-bold mb-0"><i class="fa-solid fa-calendar-check text-primary me-2"></i>Kepatuhan Jadwal (Study Planner)</h5>
                     <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-2 py-1 rounded-pill">{{ $studySessionsCompletionRate }}%</span>
                 </div>
                 <div class="progress gamification-progress mb-3" style="height: 8px;">
@@ -65,7 +65,7 @@
         <div class="col-md-6">
             <div class="glass-card p-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-bold mb-0 text-white"><i class="fa-solid fa-circle-check text-success me-2"></i>Keberhasilan Kebiasaan (Habit Tracker)</h5>
+                    <h5 class="fw-bold mb-0"><i class="fa-solid fa-circle-check text-success me-2"></i>Keberhasilan Kebiasaan (Habit Tracker)</h5>
                     <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-pill">{{ $habitsCompletionRate }}%</span>
                 </div>
                 <div class="progress gamification-progress mb-3" style="height: 8px;">

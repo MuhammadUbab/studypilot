@@ -23,10 +23,10 @@
                          style="width: 100px; height: 100px; object-fit: cover;" id="avatar-preview">
                 </div>
                 <div>
-                    <h5 class="text-white mb-2">Foto Profil</h5>
+                    <h5 class="mb-2">Foto Profil</h5>
                     <p class="text-secondary small mb-3">Maksimum ukuran file: 2MB (JPG, JPEG, PNG, GIF)</p>
                     <input type="file" name="foto_profil" id="foto_profil" class="form-control form-control-sm" 
-                           onchange="previewImage(event)" style="background: rgba(255,255,255,0.05); color:#fff;">
+                           onchange="previewImage(event)" style="background: rgba(255,255,255,0.05); color:var(--text-heading);">
                 </div>
             </div>
 
@@ -59,7 +59,7 @@
 
             <hr class="my-4" style="border-color: var(--border-color);">
 
-            <h4 class="fw-bold mb-3 text-white">Tampilan</h4>
+            <h4 class="fw-bold mb-3">Tampilan</h4>
             <div class="row mb-4">
                 <div class="col-md-6">
                     <label for="theme_preference" class="form-label">Tema Aplikasi</label>

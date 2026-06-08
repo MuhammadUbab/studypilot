@@ -55,7 +55,7 @@
                                 </span>
                                 <span class="text-secondary small">{{ $material->created_at->diffForHumans() }}</span>
                             </div>
-                            <h5 class="text-white mb-2 text-truncate" title="{{ $material->judul }}">{{ $material->judul }}</h5>
+                            <h5 class="mb-2 text-truncate" title="{{ $material->judul }}">{{ $material->judul }}</h5>
                             <p class="text-secondary small mb-4" style="display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis;">
                                 {{ strip_tags($material->summary) }}
                             </p>
@@ -83,7 +83,7 @@
 <!-- Modal Unggah Materi -->
 <div class="modal fade" id="uploadMaterialModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-dark border-secondary text-white" style="border-radius:16px;">
+        <div class="modal-content bg-dark border-secondary text-heading" style="border-radius:16px;">
             <div class="modal-header border-secondary">
                 <h5 class="modal-title">Unggah Materi Baru</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -93,7 +93,7 @@
                     @csrf
                     <div class="mb-3">
                         <label for="materialTitle" class="form-label">Nama / Judul Materi</label>
-                        <input type="text" class="form-control bg-dark border-secondary text-white" id="materialTitle" name="judul" required placeholder="Contoh: Bab 2 - Struktur Sistem Operasi">
+                        <input type="text" class="form-control bg-dark border-secondary text-heading" id="materialTitle" name="judul" required placeholder="Contoh: Bab 2 - Struktur Sistem Operasi">
                     </div>
                     
                     <div class="mb-3">
@@ -121,13 +121,13 @@
                     <!-- File Input Group -->
                     <div class="mb-3" id="fileInputGroup">
                         <label for="fileUpload" class="form-label" id="fileUploadLabel">Pilih File PDF</label>
-                        <input type="file" class="form-control bg-dark border-secondary text-white" id="fileUpload" name="file_upload" accept=".pdf">
+                        <input type="file" class="form-control bg-dark border-secondary text-heading" id="fileUpload" name="file_upload" accept=".pdf">
                     </div>
 
                     <!-- YouTube Input Group -->
                     <div class="mb-3 d-none" id="youtubeInputGroup">
                         <label for="youtubeUrl" class="form-label">Tautan Video YouTube</label>
-                        <input type="url" class="form-control bg-dark border-secondary text-white" id="youtubeUrl" name="youtube_url" placeholder="https://www.youtube.com/watch?v=...">
+                        <input type="url" class="form-control bg-dark border-secondary text-heading" id="youtubeUrl" name="youtube_url" placeholder="https://www.youtube.com/watch?v=...">
                     </div>
 
                     <div class="modal-footer border-secondary px-0 pb-0 mt-4">

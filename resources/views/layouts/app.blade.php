@@ -45,7 +45,7 @@
 
     <!-- Mobile Top Navigation -->
     <header class="d-lg-none border-bottom p-3 d-flex justify-content-between align-items-center w-100" style="background-color: var(--bg-sidebar); border-color: var(--border-color); position: sticky; top: 0; z-index: 1000;">
-        <a href="{{ route('landing') }}" class="text-decoration-none fs-4 fw-bold text-white mb-0">
+        <a href="{{ route('landing') }}" class="text-decoration-none fs-4 fw-bold text-heading mb-0">
             <i class="fa-solid fa-paper-plane me-2 text-indigo" style="color: var(--color-primary);"></i>StudyPilot
         </a>
         <div class="d-flex align-items-center gap-2">
@@ -62,7 +62,7 @@
     </header>
 
     <!-- Mobile Offcanvas Sidebar -->
-    <div class="offcanvas offcanvas-start text-white d-lg-none" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel" style="background-color: var(--bg-sidebar); width: 280px; border-right: 1px solid var(--border-color);">
+    <div class="offcanvas offcanvas-start text-heading d-lg-none" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel" style="background-color: var(--bg-sidebar); width: 280px; border-right: 1px solid var(--border-color);">
         <div class="offcanvas-header border-bottom" style="border-color: var(--border-color);">
             <h5 class="offcanvas-title fw-bold" id="mobileSidebarLabel">
                 <i class="fa-solid fa-paper-plane me-2 text-indigo" style="color: var(--color-primary);"></i>StudyPilot

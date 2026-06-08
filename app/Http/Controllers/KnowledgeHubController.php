@@ -31,6 +31,9 @@ class KnowledgeHubController extends Controller
 
     public function store(Request $request)
     {
+        \Log::info("UPLOAD_AUDIT - Start store method.");
+        $t_start = microtime(true);
+
         $request->validate([
             'judul' => 'required|string|max:255',
             'tipe_file' => 'required|string|in:pdf,docx,pptx,youtube',
@@ -61,8 +64,6 @@ class KnowledgeHubController extends Controller
 
         if (in_array($request->tipe_file, ['pdf', 'docx', 'pptx']) && $request->hasFile('file_upload')) {
             $file = $request->file('file_upload');
-
-            // 1. Ekstrak Teks Terlebih Dahulu saat File Masih di Temp
             $tempPath = $file->getRealPath();
             
             try {
@@ -84,12 +85,14 @@ class KnowledgeHubController extends Controller
                 $extractedText = "Teks dokumen: " . $request->judul;
             }
 
-            $extractedText = Str::limit($extractedText, 15000);
+            if (empty(trim($extractedText))) {
+                $extractedText = "Materi dokumen: " . $request->judul . ". Teks dokumen kosong atau tidak terbaca secara otomatis. Harap buat analisis dan ringkasan penting berdasarkan judul materi tersebut.";
+            }
 
-            // 2. Upload File ke Supabase Storage (atau lokal fallback)
+            $extractedText = Str::limit($extractedText, 3000);
+
             $fileUrl = $this->storageService->upload($file, 'materials');
         } else {
-            // YouTube Link
             $fileUrl = $request->youtube_url;
             $extractedText = "Video YouTube dengan judul: " . $request->judul . ". Tautan: " . $fileUrl;
         }
@@ -101,18 +104,18 @@ class KnowledgeHubController extends Controller
         // Buat prompt untuk AI
         $prompt = "Materi: " . $request->judul . "\n\nIsi Konten/Teks:\n" . $extractedText;
 
-        // Panggil OpenRouter Service untuk generate summary
-        $summary = $this->aiService->generate($prompt, 'summary', $systemPrompt);
-
-        // Buat material baru
+        // Buat material baru dengan summary default (proses di background)
         $material = Material::create([
             'user_id' => Auth::id(),
             'judul' => $request->judul,
             'tipe_file' => $request->tipe_file,
             'file_url' => $fileUrl,
-            'summary' => $summary,
+            'summary' => 'Ringkasan sedang diproses, silakan buka kembali beberapa saat lagi.',
             'mindmap_data' => null,
         ]);
+
+        // Dispatch background job untuk memproses summary
+        dispatch(new \App\Jobs\GenerateSummaryJob($material, $prompt, $systemPrompt));
 
         // Award XP ke user (+100 XP)
         $user = Auth::user();

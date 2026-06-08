@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/study-planner', [StudyPlannerController::class, 'index'])->name('study-planner.index');
     Route::post('/study-planner/generate', [StudyPlannerController::class, 'generate'])->name('study-planner.generate');
     Route::post('/study-planner', [StudyPlannerController::class, 'store'])->name('study-planner.store');
+    Route::delete('/study-planner/clear', [StudyPlannerController::class, 'clear'])->name('study-planner.clear');
     Route::put('/study-planner/{session}', [StudyPlannerController::class, 'update'])->name('study-planner.update');
     Route::delete('/study-planner/{session}', [StudyPlannerController::class, 'destroy'])->name('study-planner.destroy');
     Route::post('/study-planner/{session}/toggle', [StudyPlannerController::class, 'toggleComplete'])->name('study-planner.toggle');

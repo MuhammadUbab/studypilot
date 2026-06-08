@@ -13,7 +13,7 @@
                     <li class="breadcrumb-item active text-white" aria-current="page">{{ $prediction->judul }}</li>
                 </ol>
             </nav>
-            <h2 class="fw-bold text-white mb-0">{{ $prediction->judul }}</h2>
+            <h2 class="fw-bold mb-0">{{ $prediction->judul }}</h2>
             <p class="text-secondary mt-1 mb-0">Dianalisis pada {{ $prediction->created_at->translatedFormat('d M Y, H:i') }}</p>
         </div>
         <div class="col-md-4 text-md-end mt-3 mt-md-0">
@@ -39,7 +39,7 @@
                                 stroke-dasharray="408.4" 
                                 stroke-dashoffset="{{ 408.4 - (408.4 * ($prediction->hasil_prediksi['readiness_score'] ?? 0) / 100) }}"/>
                     </svg>
-                    <span class="display-5 fw-bold text-white" style="font-family: var(--font-heading); z-index: 10;">
+                    <span class="display-5 fw-bold text-heading" style="font-family: var(--font-heading); z-index: 10;">
                         {{ $prediction->hasil_prediksi['readiness_score'] ?? 0 }}%
                     </span>
                 </div>
@@ -83,7 +83,7 @@
                         <tbody>
                             @foreach($prediction->hasil_prediksi['topics'] ?? [] as $topic)
                                 <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                    <td class="py-3 text-white fw-medium">{{ $topic['name'] }}</td>
+                                    <td class="py-3 fw-medium">{{ $topic['name'] }}</td>
                                     <td class="py-3">
                                         <span class="badge {{ $topic['probability'] === 'Tinggi' ? 'bg-danger-subtle text-danger' : ($topic['probability'] === 'Sedang' ? 'bg-warning-subtle text-warning' : 'bg-success-subtle text-success') }}">
                                             {{ $topic['probability'] }}
@@ -110,13 +110,13 @@
                     @foreach($prediction->hasil_prediksi['predictions'] ?? [] as $index => $pred)
                         <div class="accordion-item bg-transparent border-bottom border-secondary-subtle">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed bg-transparent text-white py-3.5 fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#predCollapse-{{ $index }}">
+                                <button class="accordion-button collapsed bg-transparent text-heading py-3.5 fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#predCollapse-{{ $index }}">
                                     💡 Soal {{ $index + 1 }}: {{ Str::limit($pred['question'], 60) }}
                                 </button>
                             </h2>
                             <div id="predCollapse-{{ $index }}" class="accordion-collapse collapse" data-bs-parent="#predictionsAccordion">
                                 <div class="accordion-body text-secondary small" style="line-height:1.6;">
-                                    <p class="text-white fw-medium mb-2">Soal:</p>
+                                    <p class="fw-medium mb-2">Soal:</p>
                                     <p class="text-light bg-dark p-3 rounded-3 border border-secondary mb-3">{{ $pred['question'] }}</p>
                                     <p class="text-primary fw-medium mb-2">Jawaban & Pembahasan:</p>
                                     <p class="bg-indigo-subtle p-3 rounded-3" style="background: rgba(99,102,241,0.05); color:#cfd2ff;">{{ $pred['answer'] }}</p>

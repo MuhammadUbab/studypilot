@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row mb-4 justify-content-between align-items-center">
         <div class="col-md-8">
-            <h1 class="fw-bold text-white"><i class="fa-solid fa-circle-check text-primary me-2"></i>Habit Tracker</h1>
+            <h1 class="fw-bold"><i class="fa-solid fa-circle-check text-primary me-2"></i>Habit Tracker</h1>
             <p class="text-secondary">Bangun kebiasaan belajar yang positif secara disiplin, kumpulkan streak harian, dan dapatkan bonus XP akademik!</p>
         </div>
         <div class="col-md-4 text-md-end">
@@ -21,7 +21,7 @@
         <div class="col-md-4">
             <div class="glass-card p-4 h-100 text-center">
                 <span class="text-secondary small d-block mb-1">Kelengkapan Hari Ini</span>
-                <h2 class="text-white fw-bold mb-2">{{ $todayCompletionRate }}%</h2>
+                <h2 class="fw-bold mb-2">{{ $todayCompletionRate }}%</h2>
                 <div class="progress gamification-progress" style="height: 10px;">
                     <div class="progress-bar gamification-progress-bar" role="progressbar" style="width: {{ $todayCompletionRate }}%" aria-valuenow="{{ $todayCompletionRate }}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
@@ -46,14 +46,14 @@
 
     <!-- Weekly Progress Chart / Tracker Grid -->
     <div class="glass-card p-4 mb-5">
-        <h5 class="fw-bold mb-4 text-white"><i class="fa-solid fa-chart-line text-primary me-2"></i>Progress Mingguan (Kebiasaan Selesai)</h5>
+        <h5 class="fw-bold mb-4"><i class="fa-solid fa-chart-line text-primary me-2"></i>Progress Mingguan (Kebiasaan Selesai)</h5>
         <div class="row g-3 text-center justify-content-between">
             @foreach($weeklyProgress as $day)
                 <div class="col">
                     <div class="p-3 rounded-4 {{ $day['date'] === date('Y-m-d') ? 'border border-primary bg-primary-subtle' : '' }}" style="background: rgba(255, 255, 255, 0.01);">
                         <span class="text-secondary small d-block mb-2">{{ $day['day_name'] }}</span>
                         <div class="d-flex justify-content-center align-items-center rounded-circle mx-auto mb-2" style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.08); border: 1px solid var(--border-color);">
-                            <span class="fw-bold text-white">{{ $day['count'] }}</span>
+                            <span class="fw-bold text-heading">{{ $day['count'] }}</span>
                         </div>
                         <span class="small text-secondary">{{ $day['percentage'] }}%</span>
                     </div>
@@ -64,7 +64,7 @@
 
     <!-- Habits List -->
     <div class="glass-card p-4 mb-5">
-        <h5 class="fw-bold mb-4 text-white"><i class="fa-solid fa-list-check text-primary me-2"></i>Daftar Kebiasaan Belajar</h5>
+        <h5 class="fw-bold mb-4"><i class="fa-solid fa-list-check text-primary me-2"></i>Daftar Kebiasaan Belajar</h5>
         
         @if($habits->isEmpty())
             <div class="text-center py-5 text-secondary">
@@ -86,10 +86,10 @@
                             <button class="btn rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" 
                                     style="width: 40px; height: 40px; border: 2px solid {{ $isCompleted ? 'var(--color-success)' : 'var(--border-color)' }}; background: {{ $isCompleted ? 'var(--color-success)' : 'transparent' }};"
                                     onclick="toggleHabitComplete({{ $habit->id }}, this)">
-                                <i class="fa-solid fa-check text-white {{ $isCompleted ? '' : 'd-none' }}"></i>
+                                <i class="fa-solid fa-check text-heading {{ $isCompleted ? '' : 'd-none' }}"></i>
                             </button>
                             <div>
-                                <h6 class="fw-bold mb-1 text-white {{ $isCompleted ? 'text-decoration-line-through text-success' : '' }}">{{ $habit->name }}</h6>
+                                <h6 class="fw-bold mb-1 {{ $isCompleted ?'text-decoration-line-through text-success' : '' }}">{{ $habit->name }}</h6>
                                 <div class="d-flex align-items-center gap-3 text-secondary small">
                                     <span><i class="fa-solid fa-fire text-warning me-1"></i>{{ $habit->streak }} Hari Streak</span>
                                     @if($habit->last_completed_at)
@@ -137,7 +137,7 @@
 
     <!-- Suggested Habits Section -->
     <div class="glass-card p-4">
-        <h5 class="fw-bold mb-4 text-white"><i class="fa-solid fa-lightbulb text-warning me-2"></i>Saran Kebiasaan Belajar Positif</h5>
+        <h5 class="fw-bold mb-4"><i class="fa-solid fa-lightbulb text-warning me-2"></i>Saran Kebiasaan Belajar Positif</h5>
         <div class="row g-3">
             @php
                 $suggestions = [
@@ -150,7 +150,7 @@
             @endphp
             @foreach($suggestions as $sug)
                 <div class="col-md-6 col-lg-4">
-                    <button class="w-100 p-3 rounded-4 border border-secondary-subtle text-start d-flex align-items-center justify-content-between hover-glow cursor-pointer text-white" 
+                    <button class="w-100 p-3 rounded-4 border border-secondary-subtle text-start d-flex align-items-center justify-content-between hover-glow cursor-pointer text-heading" 
                             style="background: rgba(255, 255, 255, 0.01);" 
                             onclick="addSuggestedHabit('{{ $sug['name'] }}')">
                         <div class="d-flex align-items-center gap-3 overflow-hidden">
@@ -170,7 +170,7 @@
 <!-- Modal Tambah Kebiasaan -->
 <div class="modal fade" id="addHabitModal" tabindex="-1" aria-labelledby="addHabitModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-white" style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); backdrop-filter: var(--glass-blur);">
+        <div class="modal-content text-heading" style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); backdrop-filter: var(--glass-blur);">
             <div class="modal-header border-bottom border-secondary-subtle">
                 <h5 class="modal-title fw-bold" id="addHabitModalLabel"><i class="fa-solid fa-plus text-primary me-2"></i>Tambah Kebiasaan Baru</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -180,7 +180,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="name" class="form-label text-secondary">Nama Kebiasaan</label>
-                        <input type="text" class="form-control text-white" style="background-color: var(--input-bg);" id="name" name="name" required placeholder="Contoh: Belajar Pemrograman 30 Menit">
+                        <input type="text" class="form-control text-heading" style="background-color: var(--input-bg);" id="name" name="name" required placeholder="Contoh: Belajar Pemrograman 30 Menit">
                     </div>
                 </div>
                 <div class="modal-footer border-top border-secondary-subtle">
@@ -195,7 +195,7 @@
 <!-- Modal Edit Kebiasaan -->
 <div class="modal fade" id="editHabitModal" tabindex="-1" aria-labelledby="editHabitModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-white" style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); backdrop-filter: var(--glass-blur);">
+        <div class="modal-content text-heading" style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); backdrop-filter: var(--glass-blur);">
             <div class="modal-header border-bottom border-secondary-subtle">
                 <h5 class="modal-title fw-bold" id="editHabitModalLabel"><i class="fa-solid fa-edit text-primary me-2"></i>Edit Kebiasaan</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -206,7 +206,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="edit_name" class="form-label text-secondary">Nama Kebiasaan</label>
-                        <input type="text" class="form-control text-white" style="background-color: var(--input-bg);" id="edit_name" name="name" required>
+                        <input type="text" class="form-control text-heading" style="background-color: var(--input-bg);" id="edit_name" name="name" required>
                     </div>
                 </div>
                 <div class="modal-footer border-top border-secondary-subtle">

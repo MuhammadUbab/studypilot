@@ -56,7 +56,7 @@
                                     <div class="d-flex align-items-center">
                                         <img src="{{ $sub->user->foto_profil_url }}" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover; border: 1px solid var(--color-primary);">
                                         <div>
-                                            <div class="fw-bold text-white">{{ $sub->user->name }}</div>
+                                            <div class="fw-bold text-heading">{{ $sub->user->name }}</div>
                                             <small class="text-secondary">{{ $sub->user->email }}</small>
                                         </div>
                                     </div>

@@ -14,7 +14,7 @@
                     <li class="breadcrumb-item active text-white" aria-current="page">Kuis AI</li>
                 </ol>
             </nav>
-            <h2 class="fw-bold text-white mb-0">{{ $quiz->judul_quiz }}</h2>
+            <h2 class="fw-bold mb-0">{{ $quiz->judul_quiz }}</h2>
         </div>
     </div>
 
@@ -35,7 +35,7 @@
                         </span>
                     </div>
 
-                    <h5 class="text-white mb-4" style="line-height: 1.5;">{{ $q['question'] }}</h5>
+                    <h5 class="mb-4" style="line-height: 1.5;">{{ $q['question'] }}</h5>
 
                     <!-- Render Options based on Type -->
                     @if(in_array($q['type'], ['pilihan_ganda', 'hots', 'true_false']))
@@ -70,7 +70,7 @@
             <div class="position-absolute" style="top:-50px; right:-50px; width:200px; height:200px; background:radial-gradient(circle, var(--color-primary-glow) 0%, transparent 70%); border-radius:50%; pointer-events:none;"></div>
             
             <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill mb-3">Evaluasi AI Selesai</span>
-            <h1 class="display-3 fw-bold text-white mb-2" style="font-family: var(--font-heading);">{{ $quiz->skor }} <span class="fs-4 text-secondary">/ 100</span></h1>
+            <h1 class="display-3 fw-bold mb-2" style="font-family: var(--font-heading);">{{ $quiz->skor }} <span class="fs-4 text-secondary">/ 100</span></h1>
             
             @if($quiz->skor >= 70)
                 <p class="text-success fw-semibold fs-5 mb-4">🎉 Luar biasa! Anda lulus kuis ini dengan sangat baik.</p>
@@ -90,7 +90,7 @@
             </div>
         </div>
 
-        <h3 class="fw-bold mb-4 text-white">Pembahasan Soal AI</h3>
+        <h3 class="fw-bold mb-4">Pembahasan Soal AI</h3>
         
         @php $questions = $quiz->soal_jawaban['questions'] ?? []; @endphp
         @foreach($questions as $index => $q)
@@ -104,7 +104,7 @@
                     </span>
                 </div>
 
-                <h5 class="text-white mb-4">{{ $q['question'] }}</h5>
+                <h5 class="mb-4">{{ $q['question'] }}</h5>
 
                 @if(in_array($q['type'], ['pilihan_ganda', 'hots', 'true_false']))
                     <div class="d-flex flex-column gap-2 mb-4">

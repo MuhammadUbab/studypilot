@@ -16,19 +16,19 @@
         <div class="col-md-4">
             <div class="glass-card p-4 text-center">
                 <h6 class="text-secondary mb-2">Total Requests</h6>
-                <h3 class="text-white mb-0 fw-bold">{{ $totalRequests }}</h3>
+                <h3 class="mb-0 fw-bold">{{ $totalRequests }}</h3>
             </div>
         </div>
         <div class="col-md-4">
             <div class="glass-card p-4 text-center">
                 <h6 class="text-secondary mb-2">Total Tokens</h6>
-                <h3 class="text-white mb-0 fw-bold">{{ number_format($totalTokens) }} tkn</h3>
+                <h3 class="mb-0 fw-bold">{{ number_format($totalTokens) }} tkn</h3>
             </div>
         </div>
         <div class="col-md-4">
             <div class="glass-card p-4 text-center">
                 <h6 class="text-secondary mb-2">Estimasi Biaya API</h6>
-                <h3 class="text-white mb-0 fw-bold">${{ number_format($estimatedCost, 4) }}</h3>
+                <h3 class="mb-0 fw-bold">${{ number_format($estimatedCost, 4) }}</h3>
             </div>
         </div>
     </div>
@@ -52,7 +52,7 @@
                             <tbody>
                                 @foreach($modelStats as $stat)
                                     <tr class="border-bottom border-secondary-subtle">
-                                        <td class="py-2.5 text-white">{{ $stat->model }}</td>
+                                        <td class="py-2.5">{{ $stat->model }}</td>
                                         <td class="py-2.5 fw-bold">{{ $stat->count }}</td>
                                     </tr>
                                 @endforeach
@@ -87,7 +87,7 @@
                     <tbody>
                         @foreach($recentLogs as $log)
                             <tr class="border-bottom border-secondary-subtle">
-                                <td class="py-3 text-white fw-medium">{{ $log->user->name ?? 'System' }}</td>
+                                <td class="py-3 fw-medium">{{ $log->user->name ?? 'System' }}</td>
                                 <td class="py-3 text-capitalize"><span class="badge bg-secondary-subtle text-secondary">{{ str_replace('_', ' ', $log->feature) }}</span></td>
                                 <td class="py-3 text-secondary">{{ $log->model }}</td>
                                 <td class="py-3 fw-bold">{{ number_format($log->token_usage) }}</td>

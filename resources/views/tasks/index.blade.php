@@ -25,7 +25,7 @@
             <a href="{{ route('tasks.index', ['status' => 'completed']) }}" class="btn btn-sm {{ request()->status === 'completed' ? 'btn-primary' : 'btn-outline-light' }}">Selesai</a>
         </div>
         <div class="col-md-4 d-flex justify-content-md-end gap-2">
-            <select class="form-select form-select-sm bg-dark border-secondary text-white" style="width: 150px;" onchange="location = this.value;">
+            <select class="form-select form-select-sm bg-dark border-secondary text-heading" style="width: 150px;" onchange="location = this.value;">
                 <option value="{{ route('tasks.index', request()->except('prioritas')) }}">Semua Prioritas</option>
                 <option value="{{ route('tasks.index', array_merge(request()->query(), ['prioritas' => 'high'])) }}" {{ request()->prioritas === 'high' ? 'selected' : '' }}>Tinggi</option>
                 <option value="{{ route('tasks.index', array_merge(request()->query(), ['prioritas' => 'medium'])) }}" {{ request()->prioritas === 'medium' ? 'selected' : '' }}>Sedang</option>
@@ -64,7 +64,7 @@
                             <input type="checkbox" class="form-check-input mt-1" style="width:20px; height:20px; cursor:pointer;" 
                                    {{ $task->status === 'completed' ? 'checked' : '' }} 
                                    onclick="toggleTaskStatus({{ $task->id }})">
-                            <h5 class="text-white mb-0 {{ $task->status === 'completed' ? 'text-decoration-line-through text-secondary' : '' }}" id="task-title-{{ $task->id }}">
+                            <h5 class="mb-0 {{ $task->status ==='completed' ? 'text-decoration-line-through text-secondary' : '' }}" id="task-title-{{ $task->id }}">
                                 {{ $task->judul }}
                             </h5>
                         </div>
@@ -105,7 +105,7 @@
 <!-- Modal Tambah Tugas -->
 <div class="modal fade" id="addTaskModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-dark border-secondary text-white" style="border-radius:16px;">
+        <div class="modal-content bg-dark border-secondary text-heading" style="border-radius:16px;">
             <div class="modal-header border-secondary">
                 <h5 class="modal-title">Tambah Tugas Baru</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -115,20 +115,20 @@
                     @csrf
                     <div class="mb-3">
                         <label for="taskTitle" class="form-label">Judul Tugas</label>
-                        <input type="text" class="form-control bg-dark border-secondary text-white" id="taskTitle" name="judul" required placeholder="Contoh: Laporan Algoritma Struktur Data">
+                        <input type="text" class="form-control bg-dark border-secondary text-heading" id="taskTitle" name="judul" required placeholder="Contoh: Laporan Algoritma Struktur Data">
                     </div>
                     <div class="mb-3">
                         <label for="taskDesc" class="form-label">Deskripsi & Instruksi</label>
-                        <textarea class="form-control bg-dark border-secondary text-white" id="taskDesc" name="deskripsi" rows="3" placeholder="Masukkan instruksi pengerjaan..."></textarea>
+                        <textarea class="form-control bg-dark border-secondary text-heading" id="taskDesc" name="deskripsi" rows="3" placeholder="Masukkan instruksi pengerjaan..."></textarea>
                     </div>
                     <div class="row">
                         <div class="col-6 mb-3">
                             <label for="taskDeadline" class="form-label">Tenggat Waktu</label>
-                            <input type="datetime-local" class="form-control bg-dark border-secondary text-white" id="taskDeadline" name="deadline">
+                            <input type="datetime-local" class="form-control bg-dark border-secondary text-heading" id="taskDeadline" name="deadline">
                         </div>
                         <div class="col-6 mb-3">
                             <label for="taskPriority" class="form-label">Prioritas</label>
-                            <select class="form-select bg-dark border-secondary text-white" id="taskPriority" name="prioritas">
+                            <select class="form-select bg-dark border-secondary text-heading" id="taskPriority" name="prioritas">
                                 <option value="low">Rendah</option>
                                 <option value="medium" selected>Sedang</option>
                                 <option value="high">Tinggi</option>
@@ -148,7 +148,7 @@
 <!-- Modal Edit Tugas -->
 <div class="modal fade" id="editTaskModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-dark border-secondary text-white" style="border-radius:16px;">
+        <div class="modal-content bg-dark border-secondary text-heading" style="border-radius:16px;">
             <div class="modal-header border-secondary">
                 <h5 class="modal-title">Edit Tugas</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -159,20 +159,20 @@
                     @method('PUT')
                     <div class="mb-3">
                         <label for="editTaskTitle" class="form-label">Judul Tugas</label>
-                        <input type="text" class="form-control bg-dark border-secondary text-white" id="editTaskTitle" name="judul" required>
+                        <input type="text" class="form-control bg-dark border-secondary text-heading" id="editTaskTitle" name="judul" required>
                     </div>
                     <div class="mb-3">
                         <label for="editTaskDesc" class="form-label">Deskripsi & Instruksi</label>
-                        <textarea class="form-control bg-dark border-secondary text-white" id="editTaskDesc" name="deskripsi" rows="3"></textarea>
+                        <textarea class="form-control bg-dark border-secondary text-heading" id="editTaskDesc" name="deskripsi" rows="3"></textarea>
                     </div>
                     <div class="row">
                         <div class="col-6 mb-3">
                             <label for="editTaskDeadline" class="form-label">Tenggat Waktu</label>
-                            <input type="datetime-local" class="form-control bg-dark border-secondary text-white" id="editTaskDeadline" name="deadline">
+                            <input type="datetime-local" class="form-control bg-dark border-secondary text-heading" id="editTaskDeadline" name="deadline">
                         </div>
                         <div class="col-6 mb-3">
                             <label for="editTaskPriority" class="form-label">Prioritas</label>
-                            <select class="form-select bg-dark border-secondary text-white" id="editTaskPriority" name="prioritas">
+                            <select class="form-select bg-dark border-secondary text-heading" id="editTaskPriority" name="prioritas">
                                 <option value="low">Rendah</option>
                                 <option value="medium">Sedang</option>
                                 <option value="high">Tinggi</option>
@@ -181,7 +181,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="editTaskStatus" class="form-label">Status</label>
-                        <select class="form-select bg-dark border-secondary text-white" id="editTaskStatus" name="status">
+                        <select class="form-select bg-dark border-secondary text-heading" id="editTaskStatus" name="status">
                             <option value="todo">Todo</option>
                             <option value="in_progress">Sedang Dikerjakan</option>
                             <option value="completed">Selesai</option>

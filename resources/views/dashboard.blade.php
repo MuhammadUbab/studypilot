@@ -14,7 +14,7 @@
         <div class="col-md-4 text-md-end mt-3 mt-md-0">
             <div class="glass-card p-3 d-inline-block text-start" style="min-width: 250px;">
                 <div class="d-flex justify-content-between mb-2">
-                    <span class="fw-semibold text-white">Lvl {{ auth()->user()->level }}</span>
+                    <span class="fw-semibold text-heading">Lvl {{ auth()->user()->level }}</span>
                     <span class="text-secondary small">{{ auth()->user()->xp }} / {{ auth()->user()->level * 500 }} XP</span>
                 </div>
                 <div class="gamification-progress">
@@ -86,7 +86,7 @@
                                     <i class="fa-solid {{ $act['icon'] }} {{ $act['color'] }}" style="font-size: 0.75rem;"></i>
                                 </span>
                                 <div class="ms-2">
-                                    <div class="text-white fw-medium" style="font-size: 0.95rem;">{{ $act['title'] }}</div>
+                                    <div class="text-heading fw-medium" style="font-size: 0.95rem;">{{ $act['title'] }}</div>
                                     <div class="text-secondary small">{{ $act['time']->diffForHumans() }}</div>
                                 </div>
                             </div>
@@ -111,7 +111,7 @@
                         @foreach($upcomingDeadlines as $task)
                             <li class="p-3 mb-2 rounded-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color);">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <span class="text-white fw-medium text-truncate" style="max-width: 70%;">{{ $task->judul }}</span>
+                                    <span class="text-heading fw-medium text-truncate" style="max-width: 70%;">{{ $task->judul }}</span>
                                     <span class="badge {{ $task->prioritas === 'high' ? 'bg-danger-subtle text-danger' : ($task->prioritas === 'medium' ? 'bg-warning-subtle text-warning' : 'bg-success-subtle text-success') }} text-capitalize">
                                         {{ $task->prioritas }}
                                     </span>

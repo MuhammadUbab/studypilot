@@ -17,16 +17,16 @@
             @csrf
             
             <div class="mb-4">
-                <label class="form-label text-white fw-semibold">Penyedia API Utama</label>
-                <select class="form-select bg-dark border-secondary text-white" disabled>
+                <label class="form-label fw-semibold">Penyedia API Utama</label>
+                <select class="form-select bg-dark border-secondary text-heading" disabled>
                     <option value="openrouter" selected>OpenRouter API (Direkomendasikan)</option>
                 </select>
                 <span class="text-secondary small mt-1 d-block">OpenRouter dikonfigurasi melalui kunci lingkungan API Anda.</span>
             </div>
 
             <div class="mb-4">
-                <label for="default_model" class="form-label text-white fw-semibold">Model AI Default (Utama)</label>
-                <select class="form-select bg-dark border-secondary text-white" id="default_model" name="default_model" required>
+                <label for="default_model" class="form-label fw-semibold">Model AI Default (Utama)</label>
+                <select class="form-select bg-dark border-secondary text-heading" id="default_model" name="default_model" required>
                     <option value="deepseek/deepseek-chat" {{ $defaultModel === 'deepseek/deepseek-chat' ? 'selected' : '' }}>DeepSeek V3 (Default)</option>
                     <option value="google/gemini-2.5-flash" {{ $defaultModel === 'google/gemini-2.5-flash' ? 'selected' : '' }}>Gemini 2.5 Flash</option>
                     <option value="anthropic/claude-3-haiku" {{ $defaultModel === 'anthropic/claude-3-haiku' ? 'selected' : '' }}>Claude 3 Haiku</option>

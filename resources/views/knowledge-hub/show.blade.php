@@ -13,7 +13,7 @@
                     <li class="breadcrumb-item active text-white" aria-current="page">{{ $material->judul }}</li>
                 </ol>
             </nav>
-            <h2 class="fw-bold text-white mb-0">{{ $material->judul }}</h2>
+            <h2 class="fw-bold mb-0">{{ $material->judul }}</h2>
         </div>
         <div class="col-md-4 text-md-end mt-3 mt-md-0 d-flex gap-2 justify-content-md-end">
             <!-- Generate Quiz Form -->
@@ -42,9 +42,14 @@
                         <i class="fa-solid fa-file-pdf me-1 text-danger"></i> Download PDF
                     </a>
                 </div>
-                
+
+                <!-- DEBUG FIELD -->
+                <div class="alert alert-warning p-2 small mb-3" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); color: var(--color-warning);">
+                    DEBUG: Length = {{ strlen($material->summary) }} | Prefix = {{ substr($material->summary, 0, 100) }}
+                </div>
+
                 <!-- Markdown Rendered Summary -->
-                <div class="text-light markdown-body" id="summary-content" style="line-height: 1.7; font-size: 0.95rem;">
+                <div class="text-primary-theme markdown-body" id="summary-content" style="line-height: 1.7; font-size: 0.95rem;">
                     <!-- Raw text fallback -->
                     {!! nl2br(e($material->summary)) !!}
                 </div>
@@ -62,7 +67,7 @@
                 <div class="flex-grow-1 overflow-y-auto mb-3 pe-2" id="chat-messages" style="max-height: 400px; display:flex; flex-direction:column; gap:16px;">
                     <!-- Greeting Message -->
                     <div class="d-flex align-items-start gap-2.5 max-w-80">
-                        <div class="bg-indigo text-white p-3 rounded-4 rounded-tl-0 shadow-sm" style="background: rgba(99, 102, 241, 0.12); border:1px solid rgba(99, 102, 241, 0.2);">
+                        <div class="bg-indigo text-heading p-3 rounded-4 rounded-tl-0 shadow-sm" style="background: rgba(99, 102, 241, 0.12); border:1px solid rgba(99, 102, 241, 0.2);">
                             <span class="fw-semibold text-primary d-block small mb-1">StudyPilot AI</span>
                             Halo! Saya sudah membaca materi **{{ $material->judul }}**. Silakan tanyakan apa saja terkait dokumen ini, dan saya akan menjawabnya secara ringkas berdasarkan isi dokumen.
                         </div>
@@ -73,7 +78,7 @@
                 <div class="mt-auto border-top border-secondary-subtle pt-3">
                     <form id="chat-form" onsubmit="sendChatMessage(event)">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-dark border-secondary text-white" id="chat-input" placeholder="Tanyakan tentang materi..." autocomplete="off" required>
+                            <input type="text" class="form-control bg-dark border-secondary text-heading" id="chat-input" placeholder="Tanyakan tentang materi..." autocomplete="off" required>
                             <button class="btn btn-primary px-3" type="submit" id="chat-send-btn">
                                 <i class="fa-solid fa-paper-plane"></i>
                             </button>
@@ -93,7 +98,11 @@
     // Parse Markdown Summary
     try {
         const rawSummary = {!! json_encode($material->summary) !!};
-        document.getElementById('summary-content').innerHTML = marked.parse(rawSummary);
+        if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
+            document.getElementById('summary-content').innerHTML = marked.parse(rawSummary);
+        } else {
+            console.warn('Marked library not loaded or parse function not available. Using raw text fallback.');
+        }
     } catch (e) {
         console.error('Failed to parse summary markdown:', e);
     }
@@ -115,7 +124,7 @@
         const userMsgDiv = document.createElement('div');
         userMsgDiv.style.alignSelf = 'flex-end';
         userMsgDiv.innerHTML = `
-            <div class="bg-secondary text-white p-3 rounded-4 rounded-tr-0 shadow-sm" style="background: rgba(255, 255, 255, 0.05); border:1px solid rgba(255, 255, 255, 0.08);">
+            <div class="bg-secondary text-heading p-3 rounded-4 rounded-tr-0 shadow-sm" style="background: rgba(255, 255, 255, 0.05); border:1px solid rgba(255, 255, 255, 0.08);">
                 <span class="fw-semibold text-secondary d-block small mb-1">Anda</span>
                 ${query}
             </div>
@@ -127,7 +136,7 @@
         const typingDiv = document.createElement('div');
         typingDiv.id = 'ai-typing-indicator';
         typingDiv.innerHTML = `
-            <div class="bg-indigo text-white p-3 rounded-4 rounded-tl-0 shadow-sm" style="background: rgba(99, 102, 241, 0.08); border:1px solid rgba(99, 102, 241, 0.1);">
+            <div class="bg-indigo text-heading p-3 rounded-4 rounded-tl-0 shadow-sm" style="background: rgba(99, 102, 241, 0.08); border:1px solid rgba(99, 102, 241, 0.1);">
                 <span class="spinner-border spinner-border-sm text-primary me-2" role="status"></span>AI sedang mengetik...
             </div>
         `;
@@ -153,7 +162,7 @@
                 // Append AI Response
                 const aiMsgDiv = document.createElement('div');
                 aiMsgDiv.innerHTML = `
-                    <div class="bg-indigo text-white p-3 rounded-4 rounded-tl-0 shadow-sm" style="background: rgba(99, 102, 241, 0.12); border:1px solid rgba(99, 102, 241, 0.2);">
+                    <div class="bg-indigo text-heading p-3 rounded-4 rounded-tl-0 shadow-sm" style="background: rgba(99, 102, 241, 0.12); border:1px solid rgba(99, 102, 241, 0.2);">
                         <span class="fw-semibold text-primary d-block small mb-1">StudyPilot AI</span>
                         ${marked.parse(data.response)}
                     </div>

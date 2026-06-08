@@ -15,7 +15,7 @@
     <div class="auth-container">
         <div class="glass-card auth-card shadow-lg">
             <div class="text-center mb-4">
-                <a href="{{ route('landing') }}" class="text-decoration-none fs-2 fw-bold text-white">
+                <a href="{{ route('landing') }}" class="text-decoration-none fs-2 fw-bold text-heading">
                     <i class="fa-solid fa-paper-plane me-2" style="color: var(--color-primary);"></i>StudyPilot
                 </a>
                 <p class="text-secondary mt-2">Masuk ke akun belajar Anda</p>

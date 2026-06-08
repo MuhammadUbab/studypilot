@@ -26,6 +26,11 @@ class OpenRouterService
         // Get model settings from database or fallback to config
         $model = PromptSetting::where('key', 'ai_default_model')->value('value') ?? config('services.openrouter.default_model');
 
+        // Override model to openai/gpt-4o-mini if feature is summary and model is deepseek/deepseek-chat
+        if ($feature === 'summary' && $model === 'deepseek/deepseek-chat') {
+            $model = 'openai/gpt-4o-mini';
+        }
+
         // Personalize prompt based on user's education level
         if (Auth::check()) {
             $level = Auth::user()->education_level;
@@ -46,6 +51,12 @@ class OpenRouterService
             return $this->generateMockResponse($prompt, $feature, $model);
         }
 
+        $requestLength = strlen($prompt) + ($systemPrompt ? strlen($systemPrompt) : 0);
+        $startTime = microtime(true);
+        $responseLength = 0;
+        $duration = 0.0;
+        $text = '';
+
         try {
             $messages = [];
             if ($systemPrompt) {
@@ -53,11 +64,13 @@ class OpenRouterService
             }
             $messages[] = ['role' => 'user', 'content' => $prompt];
 
-            $response = Http::timeout(15)->withHeaders([
+            $response = Http::timeout(10)->withHeaders([
                 'Authorization' => 'Bearer ' . $this->apiKey,
                 'HTTP-Referer' => 'http://localhost:8000',
                 'X-Title' => 'StudyPilot',
                 'Content-Type' => 'application/json',
+            ])->withOptions([
+                'verify' => config('app.env') === 'local' ? false : true,
             ])->post($this->baseUrl . '/chat/completions', [
                 'model' => $model,
                 'messages' => $messages,
@@ -65,10 +78,25 @@ class OpenRouterService
                 'max_tokens' => 2000,
             ]);
 
+            $duration = microtime(true) - $startTime;
+
             if ($response->successful()) {
                 $data = $response->json();
                 $text = $data['choices'][0]['message']['content'] ?? '';
-                
+                $responseLength = strlen($text);
+
+                Log::info("OPENROUTER_REQUEST_LENGTH: {$requestLength}");
+                Log::info("OPENROUTER_RESPONSE_LENGTH: {$responseLength}");
+                Log::info("OPENROUTER_DURATION: {$duration}");
+
+                if (empty(trim($text))) {
+                    Log::warning("OpenRouter API returned empty choices content for $feature. Falling back to mock.");
+                    $this->checkFallback($model, $duration);
+                    return $this->generateMockResponse($prompt, $feature, $model);
+                }
+
+                $this->checkFallback($model, $duration);
+
                 // Log AI Usage
                 $tokens = $data['usage']['total_tokens'] ?? 0;
                 AiUsageLog::create([
@@ -81,10 +109,21 @@ class OpenRouterService
                 return $text;
             } else {
                 Log::error('OpenRouter API Fail: ' . $response->body());
+                Log::info("OPENROUTER_REQUEST_LENGTH: {$requestLength}");
+                Log::info("OPENROUTER_RESPONSE_LENGTH: 0");
+                Log::info("OPENROUTER_DURATION: {$duration}");
+
+                $this->checkFallback($model, $duration);
                 return $this->generateMockResponse($prompt, $feature, $model);
             }
         } catch (\Exception $e) {
+            $duration = microtime(true) - $startTime;
             Log::error('OpenRouter API Exception: ' . $e->getMessage());
+            Log::info("OPENROUTER_REQUEST_LENGTH: {$requestLength}");
+            Log::info("OPENROUTER_RESPONSE_LENGTH: 0");
+            Log::info("OPENROUTER_DURATION: {$duration}");
+
+            $this->checkFallback($model, $duration);
             return $this->generateMockResponse($prompt, $feature, $model);
         }
     }
@@ -294,5 +333,27 @@ Materi **{$subject}** mengajarkan kita untuk berpikir sistematis dalam menguraik
         }
 
         return "Response simulasi AI untuk model $model pada fitur $feature.";
+    }
+
+    /**
+     * Check if active model is deepseek/deepseek-chat and duration > 8 seconds,
+     * and fallback to openai/gpt-4o-mini.
+     */
+    protected function checkFallback(string $model, float $duration)
+    {
+        if ($model === 'deepseek/deepseek-chat' && $duration > 8.0) {
+            Log::warning("Model deepseek/deepseek-chat response time ({$duration}s) exceeded 8s limit. Falling back to openai/gpt-4o-mini.");
+            try {
+                PromptSetting::updateOrCreate(
+                    ['key' => 'ai_default_model'],
+                    [
+                        'value' => 'openai/gpt-4o-mini',
+                        'description' => 'Fallback model automatically selected due to high latency of deepseek/deepseek-chat'
+                    ]
+                );
+            } catch (\Exception $dbEx) {
+                Log::error("Failed to update ai_default_model to fallback: " . $dbEx->getMessage());
+            }
+        }
     }
 }

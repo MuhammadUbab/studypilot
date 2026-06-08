@@ -6,71 +6,95 @@
 <div class="container-fluid">
     <div class="row mb-4 justify-content-between align-items-center">
         <div class="col-md-6">
-            <h1 class="fw-bold text-white"><i class="fa-solid fa-calendar-week text-primary me-2"></i>AI Study Planner</h1>
+            <h1 class="fw-bold"><i class="fa-solid fa-calendar-week text-primary me-2"></i>AI Study Planner</h1>
             <p class="text-secondary mb-0">Rencanakan jadwal belajar otomatis secara cerdas dan efisien berdasarkan daftar tugas dan waktu luang Anda.</p>
-        </div>
-        <div class="col-md-6 text-md-end mt-3 mt-md-0">
-            @if(!$sessions->isEmpty())
-                <div class="d-flex flex-wrap gap-2 justify-content-md-end">
-                    <form action="{{ route('study-planner.generate') }}" method="POST" onsubmit="showLoadingPlanner(event)" class="d-inline">
-                        @csrf
-                        <button type="submit" class="btn btn-outline-primary">
-                            <i class="fa-solid fa-rotate me-1"></i> Regenerasi AI
-                        </button>
-                    </form>
-                    <button class="btn btn-outline-danger" onclick="confirmResetPlanner()">
-                        <i class="fa-solid fa-trash me-1"></i> Bersihkan
-                    </button>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSessionModal">
-                        <i class="fa-solid fa-plus me-1"></i> Tambah Sesi
-                    </button>
-                    <a href="{{ route('study-planner.pdf') }}" class="btn btn-outline-light">
-                        <i class="fa-solid fa-file-pdf me-1 text-danger"></i> PDF
-                    </a>
-                </div>
-            @endif
         </div>
     </div>
 
-    <!-- Weekly Progress Bar -->
-    @if(!$sessions->isEmpty())
-        @php
-            $hariList = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-            $totalSessions = 0;
-            $completedSessions = 0;
-            foreach ($hariList as $hari) {
-                $daySessions = $sessions->get($hari) ?? collect();
-                $totalSessions += $daySessions->count();
-                $completedSessions += $daySessions->where('is_completed', true)->count();
-            }
-            $progressPercent = $totalSessions > 0 ? round(($completedSessions / $totalSessions) * 100) : 0;
-        @endphp
-        <div class="glass-card p-4 mb-4">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <div class="d-flex align-items-center gap-3 mb-2">
-                        <h5 class="fw-bold mb-0 text-white"><i class="fa-solid fa-chart-line text-primary me-2"></i>Progres Belajar Mingguan</h5>
-                        <span class="badge bg-primary-subtle text-primary fw-bold" style="font-size: 0.9rem;">{{ $progressPercent }}% Selesai</span>
+    @php
+        $hariList = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+        $totalSessions = 0;
+        $completedSessions = 0;
+        foreach ($hariList as $hari) {
+            $daySessions = $sessions->get($hari) ?? collect();
+            $totalSessions += $daySessions->count();
+            $completedSessions += $daySessions->where('is_completed', true)->count();
+        }
+        $progressPercent = $totalSessions > 0 ? round(($completedSessions / $totalSessions) * 100) : 0;
+    @endphp
+
+    <!-- Progres & Statistik Mingguan -->
+    <div class="row g-4 mb-4">
+        <!-- Progress Mingguan Card -->
+        <div class="col-md-6">
+            <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="fw-bold text-secondary text-uppercase small tracking-wider">Progres Belajar Mingguan</span>
+                        <span class="badge bg-primary-subtle text-primary fw-bold px-2.5 py-1" style="font-size: 0.85rem;">{{ $progressPercent }}% Selesai</span>
                     </div>
-                    <p class="text-secondary small mb-3 mb-md-0">Pencapaian: Anda telah menyelesaikan <strong>{{ $completedSessions }}</strong> dari <strong>{{ $totalSessions }}</strong> sesi belajar yang direncanakan untuk minggu ini.</p>
+                    <h3 class="fw-bold mb-1">{{ $progressPercent }}%</h3>
+                    <p class="text-secondary small mb-3">Persentase penyelesaian seluruh sesi belajar yang direncanakan minggu ini.</p>
                 </div>
-                <div class="col-md-4">
-                    <div class="progress" style="height: 12px; background: rgba(255, 255, 255, 0.05); border-radius: 6px; overflow: hidden;">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" 
-                             style="width: {{ $progressPercent }}%; background: linear-gradient(90deg, var(--color-primary), var(--color-secondary)); border: none;" 
-                             aria-valuenow="{{ $progressPercent }}" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
+                <div class="progress" style="height: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 6px; overflow: hidden;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" 
+                         style="width: {{ $progressPercent }}%; background: linear-gradient(90deg, var(--color-primary), var(--color-secondary)); border: none;" 
+                         aria-valuenow="{{ $progressPercent }}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
         </div>
-    @endif
+        
+        <!-- Statistik Sesi Selesai Card -->
+        <div class="col-md-6">
+            <div class="glass-card p-4 h-100 d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="fw-bold text-secondary text-uppercase small tracking-wider">Statistik Sesi Belajar</span>
+                    <h3 class="fw-bold mt-2 mb-1">{{ $completedSessions }} <span class="text-secondary fs-5 fw-normal">/ {{ $totalSessions }} Sesi Selesai</span></h3>
+                    <p class="text-secondary small mb-0">
+                        @if($totalSessions > 0)
+                            Anda telah menyelesaikan {{ $completedSessions }} dari total {{ $totalSessions }} sesi belajar minggu ini. Tetap semangat!
+                        @else
+                            Belum ada sesi belajar yang direncanakan. Buat dengan AI atau tambah manual.
+                        @endif
+                    </p>
+                </div>
+                <div class="stat-icon success" style="width: 56px; height: 56px; border-radius: 14px; background: rgba(16, 185, 129, 0.1); color: var(--color-success); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unified Toolbar -->
+    <div class="glass-card p-3 mb-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div class="d-flex align-items-center gap-2">
+            <span class="fs-6 fw-bold"><i class="fa-solid fa-calendar-days text-primary me-2"></i>Jadwal Kerja & Belajar</span>
+        </div>
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <form action="{{ route('study-planner.generate') }}" method="POST" onsubmit="showLoadingPlanner(event)" class="d-inline">
+                @csrf
+                <button type="submit" class="btn btn-outline-primary btn-sm">
+                    <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Generate AI
+                </button>
+            </form>
+            <button class="btn btn-outline-danger btn-sm" onclick="confirmResetPlanner()" {{ $sessions->isEmpty() ? 'disabled' : '' }}>
+                <i class="fa-solid fa-trash me-1"></i> Bersihkan
+            </button>
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addSessionModal">
+                <i class="fa-solid fa-plus me-1"></i> Tambah Sesi
+            </button>
+            <a href="{{ route('study-planner.pdf') }}" class="btn btn-outline-light btn-sm {{ $sessions->isEmpty() ? 'disabled' : '' }}" {{ $sessions->isEmpty() ? 'style=pointer-events:none;opacity:0.6;' : '' }}>
+                <i class="fa-solid fa-file-pdf me-1 text-danger"></i> Export PDF
+            </a>
+        </div>
+    </div>
 
     <!-- Empty State -->
     @if($sessions->isEmpty())
         <div class="glass-card p-5 text-center my-5" id="empty-state-planner">
             <div class="py-5 text-secondary">
                 <i class="fa-solid fa-calendar-week mb-4 fs-1 text-muted"></i>
-                <h4 class="text-white fw-bold">Belum ada rencana belajar aktif</h4>
+                <h4 class="fw-bold">Belum ada rencana belajar aktif</h4>
                 <p class="mb-4">Buat rencana belajar harian pertama Anda secara otomatis menggunakan bantuan kecerdasan buatan StudyPilot.</p>
                 <form action="{{ route('study-planner.generate') }}" method="POST" id="generate-form" onsubmit="showLoadingPlanner(event)">
                     @csrf
@@ -79,64 +103,56 @@
             </div>
         </div>
     @else
-        <!-- Rencana Belajar Calendar View -->
-        <div class="mb-4">
-            <h5 class="fw-bold mb-0 text-white"><i class="fa-solid fa-calendar-alt text-primary me-2"></i>Jadwal Belajar Mingguan</h5>
-        </div>
-
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-4 mb-5">
-            @php
-                $hariList = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-            @endphp
+        <!-- Rencana Belajar Calendar Grid View (Senin - Minggu) -->
+        <div class="planner-grid">
             @foreach($hariList as $hari)
                 @php
                     $daySessions = $sessions->get($hari) ?? collect();
                     $daySessions = $daySessions->sortBy('waktu_mulai');
                 @endphp
-                <div class="col">
-                    <div class="glass-card p-3 h-100 d-flex flex-column" style="min-height: 380px;">
-                        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary-subtle">
-                            <h6 class="fw-bold mb-0 text-white">{{ $hari }}</h6>
-                            <span class="badge bg-secondary-subtle text-secondary small">{{ $daySessions->count() }} Sesi</span>
-                        </div>
+                <div class="planner-col">
+                    <div class="planner-col-header">
+                        <h6 class="planner-col-title">{{ $hari }}</h6>
+                        <span class="planner-col-badge">{{ $daySessions->count() }} Sesi</span>
+                    </div>
 
-                        <div class="d-flex flex-column gap-3 flex-grow-1">
-                            @if($daySessions->isEmpty())
-                                <div class="text-center py-5 my-auto text-secondary small">
-                                    <i class="fa-solid fa-bed mb-2 text-muted"></i>
-                                    <div>Istirahat / Kosong</div>
-                                </div>
-                            @else
-                                @foreach($daySessions as $session)
-                                    <div class="p-3 rounded-3 d-flex flex-column gap-2 border border-secondary-subtle transition-all {{ $session->is_completed ? 'bg-success-subtle border-success' : 'bg-dark-subtle' }}" style="background: rgba(255, 255, 255, 0.03); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
-                                        <div class="d-flex justify-content-between align-items-start gap-2">
-                                            <!-- Checkbox & Judul -->
-                                            <div class="d-flex align-items-start gap-2.5 overflow-hidden">
-                                                <input type="checkbox" class="form-check-input mt-1 flex-shrink-0 cursor-pointer" {{ $session->is_completed ? 'checked' : '' }} onclick="toggleSessionComplete({{ $session->id }}, this)">
-                                                <span class="fw-semibold text-white text-truncate text-wrap {{ $session->is_completed ? 'text-decoration-line-through text-success' : '' }}" style="font-size: 0.95rem; line-height: 1.4;">
-                                                    {{ $session->judul }}
-                                                </span>
-                                            </div>
-                                            <!-- Actions -->
-                                            <div class="d-flex gap-1.5 flex-shrink-0 mt-0.5">
-                                                <button class="btn btn-link p-0 text-secondary hover-primary" onclick="openEditModal({{ $session }})"><i class="fa-solid fa-edit small"></i></button>
-                                                <button class="btn btn-link p-0 text-secondary hover-danger" onclick="confirmDeleteSession({{ $session->id }})"><i class="fa-solid fa-trash small"></i></button>
-                                            </div>
-                                        </div>
-
-                                        <!-- Waktu & Badge Tugas -->
-                                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-1.5 mt-1 small text-secondary">
-                                            <span style="font-size: 0.85rem;"><i class="fa-regular fa-clock me-1 text-primary"></i>{{ $session->waktu_mulai }} - {{ $session->waktu_selesai }}</span>
-                                            @if($session->task_id)
-                                                <span class="badge bg-indigo-subtle text-primary border border-primary-subtle text-truncate max-w-100" style="padding: 4px 8px; font-size: 0.75rem;" title="{{ $session->task->judul }}">
-                                                    <i class="fa-solid fa-list-check me-1"></i> Tugas
-                                                </span>
-                                            @endif
+                    <div class="d-flex flex-column gap-3 flex-grow-1">
+                        @if($daySessions->isEmpty())
+                            <div class="text-center py-5 my-auto text-secondary small">
+                                <i class="fa-solid fa-bed mb-2 text-muted fs-4"></i>
+                                <div>Istirahat / Kosong</div>
+                            </div>
+                        @else
+                            @foreach($daySessions as $session)
+                                <div class="session-card {{ $session->is_completed ? 'completed' : '' }}">
+                                    <div class="d-flex justify-content-between align-items-start gap-2">
+                                        <!-- Checkbox & Judul -->
+                                        <div class="d-flex align-items-start gap-2.5 overflow-hidden">
+                                            <input type="checkbox" class="form-check-input mt-1 flex-shrink-0 cursor-pointer" {{ $session->is_completed ? 'checked' : '' }} onclick="toggleSessionComplete({{ $session->id }}, this)" style="width: 17px; height: 17px;">
+                                            <span class="session-card-title text-wrap {{ $session->is_completed ? 'text-decoration-line-through text-success' : '' }}">
+                                                {{ $session->judul }}
+                                            </span>
                                         </div>
                                     </div>
-                                @endforeach
-                            @endif
-                        </div>
+
+                                    <!-- Waktu & Badge Tugas & Aksi -->
+                                    <div class="d-flex align-items-center justify-content-between mt-3">
+                                        <span class="session-card-time">
+                                            <i class="fa-regular fa-clock text-primary"></i>{{ $session->waktu_mulai }} - {{ $session->waktu_selesai }}
+                                        </span>
+                                        <div class="d-flex gap-2 align-items-center session-card-actions">
+                                            @if($session->task_id)
+                                                <span class="badge bg-indigo-subtle text-primary border border-primary-subtle text-truncate max-w-100" style="padding: 4px 6px; font-size: 0.7rem;" title="{{ $session->task->judul }}">
+                                                    <i class="fa-solid fa-list-check me-0.5"></i> Tugas
+                                                </span>
+                                            @endif
+                                            <button type="button" class="btn-edit border-0 bg-transparent" onclick="openEditModal({{ $session }})" title="Edit"><i class="fa-solid fa-pencil" style="font-size: 0.8rem;"></i></button>
+                                            <button type="button" class="btn-delete border-0 bg-transparent" onclick="confirmDeleteSession({{ $session->id }})" title="Hapus"><i class="fa-solid fa-trash-can" style="font-size: 0.8rem;"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                              @endforeach
+                        @endif
                     </div>
                 </div>
             @endforeach
@@ -147,21 +163,21 @@
 <!-- Modal Tambah Sesi -->
 <div class="modal fade" id="addSessionModal" tabindex="-1" aria-labelledby="addSessionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-white" style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); backdrop-filter: var(--glass-blur);">
+        <div class="modal-content" style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); color: var(--text-primary); backdrop-filter: var(--glass-blur);">
             <div class="modal-header border-bottom border-secondary-subtle">
                 <h5 class="modal-title fw-bold" id="addSessionModalLabel"><i class="fa-solid fa-plus text-primary me-2"></i>Tambah Sesi Belajar</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{ route('study-planner.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="judul" class="form-label text-secondary">Judul Sesi</label>
-                        <input type="text" class="form-control text-white" style="background-color: var(--input-bg);" id="judul" name="judul" required placeholder="Contoh: Belajar Bab 3 Algoritma">
+                        <label for="judul" class="form-label">Judul Sesi</label>
+                        <input type="text" class="form-control" style="background-color: var(--input-bg); color: var(--text-primary);" id="judul" name="judul" required placeholder="Contoh: Belajar Bab 3 Algoritma">
                     </div>
                     <div class="mb-3">
-                        <label for="hari" class="form-label text-secondary">Hari</label>
-                        <select class="form-select text-white" style="background-color: var(--input-bg);" id="hari" name="hari" required>
+                        <label for="hari" class="form-label">Hari</label>
+                        <select class="form-select" style="background-color: var(--input-bg); color: var(--text-primary);" id="hari" name="hari" required>
                             <option value="Senin">Senin</option>
                             <option value="Selasa">Selasa</option>
                             <option value="Rabu">Rabu</option>
@@ -173,17 +189,17 @@
                     </div>
                     <div class="row">
                         <div class="col-6 mb-3">
-                            <label for="waktu_mulai" class="form-label text-secondary">Waktu Mulai</label>
-                            <input type="time" class="form-control text-white" style="background-color: var(--input-bg);" id="waktu_mulai" name="waktu_mulai" required>
+                            <label for="waktu_mulai" class="form-label">Waktu Mulai</label>
+                            <input type="time" class="form-control" style="background-color: var(--input-bg); color: var(--text-primary);" id="waktu_mulai" name="waktu_mulai" required>
                         </div>
                         <div class="col-6 mb-3">
-                            <label for="waktu_selesai" class="form-label text-secondary">Waktu Selesai</label>
-                            <input type="time" class="form-control text-white" style="background-color: var(--input-bg);" id="waktu_selesai" name="waktu_selesai" required>
+                            <label for="waktu_selesai" class="form-label">Waktu Selesai</label>
+                            <input type="time" class="form-control" style="background-color: var(--input-bg); color: var(--text-primary);" id="waktu_selesai" name="waktu_selesai" required>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="task_id" class="form-label text-secondary">Hubungkan dengan Tugas (Opsional)</label>
-                        <select class="form-select text-white" style="background-color: var(--input-bg);" id="task_id" name="task_id">
+                        <label for="task_id" class="form-label">Hubungkan dengan Tugas (Opsional)</label>
+                        <select class="form-select" style="background-color: var(--input-bg); color: var(--text-primary);" id="task_id" name="task_id">
                             <option value="">-- Tidak Ada --</option>
                             @foreach($tasks as $task)
                                 <option value="{{ $task->id }}">{{ $task->judul }} ({{ strtoupper($task->prioritas) }})</option>
@@ -203,22 +219,22 @@
 <!-- Modal Edit Sesi -->
 <div class="modal fade" id="editSessionModal" tabindex="-1" aria-labelledby="editSessionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-white" style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); backdrop-filter: var(--glass-blur);">
+        <div class="modal-content" style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); color: var(--text-primary); backdrop-filter: var(--glass-blur);">
             <div class="modal-header border-bottom border-secondary-subtle">
                 <h5 class="modal-title fw-bold" id="editSessionModalLabel"><i class="fa-solid fa-edit text-primary me-2"></i>Edit Sesi Belajar</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="" method="POST" id="edit-session-form">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="edit_judul" class="form-label text-secondary">Judul Sesi</label>
-                        <input type="text" class="form-control text-white" style="background-color: var(--input-bg);" id="edit_judul" name="judul" required>
+                        <label for="edit_judul" class="form-label">Judul Sesi</label>
+                        <input type="text" class="form-control" style="background-color: var(--input-bg); color: var(--text-primary);" id="edit_judul" name="judul" required>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_hari" class="form-label text-secondary">Hari</label>
-                        <select class="form-select text-white" style="background-color: var(--input-bg);" id="edit_hari" name="hari" required>
+                        <label for="edit_hari" class="form-label">Hari</label>
+                        <select class="form-select" style="background-color: var(--input-bg); color: var(--text-primary);" id="edit_hari" name="hari" required>
                             <option value="Senin">Senin</option>
                             <option value="Selasa">Selasa</option>
                             <option value="Rabu">Rabu</option>
@@ -230,17 +246,17 @@
                     </div>
                     <div class="row">
                         <div class="col-6 mb-3">
-                            <label for="edit_waktu_mulai" class="form-label text-secondary">Waktu Mulai</label>
-                            <input type="time" class="form-control text-white" style="background-color: var(--input-bg);" id="edit_waktu_mulai" name="waktu_mulai" required>
+                            <label for="edit_waktu_mulai" class="form-label">Waktu Mulai</label>
+                            <input type="time" class="form-control" style="background-color: var(--input-bg); color: var(--text-primary);" id="edit_waktu_mulai" name="waktu_mulai" required>
                         </div>
                         <div class="col-6 mb-3">
-                            <label for="edit_waktu_selesai" class="form-label text-secondary">Waktu Selesai</label>
-                            <input type="time" class="form-control text-white" style="background-color: var(--input-bg);" id="edit_waktu_selesai" name="waktu_selesai" required>
+                            <label for="edit_waktu_selesai" class="form-label">Waktu Selesai</label>
+                            <input type="time" class="form-control" style="background-color: var(--input-bg); color: var(--text-primary);" id="edit_waktu_selesai" name="waktu_selesai" required>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_task_id" class="form-label text-secondary">Hubungkan dengan Tugas (Opsional)</label>
-                        <select class="form-select text-white" style="background-color: var(--input-bg);" id="edit_task_id" name="task_id">
+                        <label for="edit_task_id" class="form-label">Hubungkan dengan Tugas (Opsional)</label>
+                        <select class="form-select" style="background-color: var(--input-bg); color: var(--text-primary);" id="edit_task_id" name="task_id">
                             <option value="">-- Tidak Ada --</option>
                             @foreach($tasks as $task)
                                 <option value="{{ $task->id }}">{{ $task->judul }} ({{ strtoupper($task->prioritas) }})</option>
@@ -289,17 +305,22 @@
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Buat form post request generator baru untuk menghapus rencana
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = "{{ route('study-planner.generate') }}";
+                form.action = "{{ route('study-planner.clear') }}";
                 
                 const csrfInput = document.createElement('input');
                 csrfInput.type = 'hidden';
                 csrfInput.name = '_token';
                 csrfInput.value = "{{ csrf_token() }}";
-                
                 form.appendChild(csrfInput);
+
+                const methodInput = document.createElement('input');
+                methodInput.type = 'hidden';
+                methodInput.name = '_method';
+                methodInput.value = 'DELETE';
+                form.appendChild(methodInput);
+                
                 document.body.appendChild(form);
                 
                 Swal.fire({
@@ -327,24 +348,17 @@
         .then(data => {
             checkbox.disabled = false;
             if (data.success) {
-                // Update parent container styling
-                const container = checkbox.closest('.transition-all');
-                const titleSpan = container.querySelector('.text-truncate');
+                const container = checkbox.closest('.session-card');
+                const titleSpan = container.querySelector('.session-card-title');
                 
                 if (data.is_completed) {
-                    container.classList.remove('bg-dark-subtle');
-                    container.classList.add('bg-success-subtle', 'border-success');
+                    container.classList.add('completed');
                     titleSpan.classList.add('text-decoration-line-through', 'text-success');
                 } else {
-                    container.classList.remove('bg-success-subtle', 'border-success');
-                    container.classList.add('bg-dark-subtle');
+                    container.classList.remove('completed');
                     titleSpan.classList.remove('text-decoration-line-through', 'text-success');
                 }
 
-                // Perbarui XP dan Level di Sidebar jika data terkirim
-                const sidebarXp = document.querySelector('.sidebar-item.active .sidebar-link'); // mock reference
-                
-                // Show Swal Toast
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
@@ -357,7 +371,6 @@
                     title: data.message
                 });
 
-                // Reload background stats to keep UI in sync (or redirect shortly)
                 setTimeout(() => {
                     window.location.reload();
                 }, 1200);

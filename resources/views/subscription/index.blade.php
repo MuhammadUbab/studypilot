@@ -6,15 +6,15 @@
 <div class="container-fluid py-4" style="max-width: 1200px; margin: 0 auto;">
     <div class="row mb-4 text-center">
         <div class="col-12">
-            <h1 class="display-6 fw-bold text-white mb-2">Upgrade Keanggotaan StudyPilot</h1>
+            <h1 class="display-6 fw-bold mb-2">Upgrade Keanggotaan StudyPilot</h1>
             <p class="text-secondary">Pilih paket terbaik untuk menunjang produktivitas dan kesuksesan akademik Anda.</p>
             
             <div class="mt-3">
                 <span class="badge bg-indigo-subtle text-primary px-4 py-2.5 rounded-pill fs-6 border border-primary-subtle" style="background-color: var(--color-primary-glow);">
-                    Status Paket Aktif Anda: <strong class="text-uppercase text-white ms-1">{{ $currentPlan === 'premium_plus' ? 'Premium Plus' : ($currentPlan === 'premium' ? 'Premium Student' : 'Free') }}</strong>
+                    Status Paket Aktif Anda: <strong class="text-uppercase ms-1">{{ $currentPlan === 'premium_plus' ? 'Premium Plus' : ($currentPlan === 'premium' ? 'Premium Student' : 'Free') }}</strong>
                 </span>
                 @if($endDate && $currentPlan !== 'free')
-                    <span class="text-secondary small d-block mt-2">Masa aktif hingga: <strong class="text-white">{{ $endDate->translatedFormat('d M Y') }}</strong></span>
+                    <span class="text-secondary small d-block mt-2">Masa aktif hingga: <strong>{{ $endDate->translatedFormat('d M Y') }}</strong></span>
                 @endif
             </div>
         </div>
@@ -22,7 +22,7 @@
 
     <!-- Monthly / Annual Toggle -->
     <div class="d-flex justify-content-center align-items-center gap-3 mb-5">
-        <span class="fw-semibold text-white" id="label-monthly">Bulanan</span>
+        <span class="fw-semibold text-heading" id="label-monthly">Bulanan</span>
         <div class="form-check form-switch fs-4 mb-0">
             <input class="form-check-input" type="checkbox" role="switch" id="billingCycleToggle" style="cursor: pointer; background-color: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);">
         </div>
@@ -37,11 +37,11 @@
         <div class="col-md-4">
             <div class="glass-card p-4 h-100 d-flex flex-column position-relative {{ $currentPlan === 'free' ? 'border border-secondary' : '' }}" style="{{ $currentPlan === 'free' ? 'background: linear-gradient(135deg, rgba(31, 41, 55, 0.4) 0%, rgba(17, 24, 39, 0.8) 100%);' : '' }}">
                 @if($currentPlan === 'free')
-                    <span class="position-absolute top-0 end-0 bg-secondary text-white px-3 py-1 rounded-bl-lg small fw-bold" style="border-bottom-left-radius: 12px; border-top-right-radius: 15px;">Aktif</span>
+                    <span class="position-absolute top-0 end-0 bg-secondary text-heading px-3 py-1 rounded-bl-lg small fw-bold" style="border-bottom-left-radius: 12px; border-top-right-radius: 15px;">Aktif</span>
                 @endif
                 <div class="mb-3">
                     <span class="badge bg-secondary-subtle text-secondary px-3 py-1 rounded-pill mb-2">Free</span>
-                    <h3 class="text-white mb-0 fw-bold">Rp0</h3>
+                    <h3 class="mb-0 fw-bold">Rp0</h3>
                     <p class="text-secondary small mt-2">Paket standar untuk semua pendaftar baru.</p>
                 </div>
                 
@@ -72,11 +72,11 @@
         <div class="col-md-4">
             <div class="glass-card p-4 h-100 d-flex flex-column position-relative" style="{{ $currentPlan === 'premium' ? 'border: 2px solid var(--color-primary) !important; background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(17, 24, 39, 0.8) 100%);' : '' }}">
                 @if($currentPlan === 'premium')
-                    <span class="position-absolute top-0 end-0 bg-primary text-white px-3 py-1 rounded-bl-lg small fw-bold" style="border-bottom-left-radius: 12px; border-top-right-radius: 15px;">Aktif</span>
+                    <span class="position-absolute top-0 end-0 bg-primary text-heading px-3 py-1 rounded-bl-lg small fw-bold" style="border-bottom-left-radius: 12px; border-top-right-radius: 15px;">Aktif</span>
                 @endif
                 <div class="mb-3">
                     <span class="badge bg-indigo-subtle text-primary px-3 py-1 rounded-pill mb-2" style="background-color: var(--color-primary-glow);">Premium Student</span>
-                    <h3 class="text-white mb-0 fw-bold"><span id="price-premium-student">Rp24.900</span> <span class="fs-6 text-secondary" id="label-premium-student">/bln</span></h3>
+                    <h3 class="mb-0 fw-bold"><span id="price-premium-student">Rp24.900</span> <span class="fs-6 text-secondary" id="label-premium-student">/bln</span></h3>
                     <p class="text-secondary small mt-2">Fitur lengkap untuk kebutuhan belajar harian Anda.</p>
                 </div>
                 
@@ -103,13 +103,13 @@
         <div class="col-md-4">
             <div class="glass-card p-4 h-100 d-flex flex-column position-relative" style="{{ $currentPlan === 'premium_plus' ? 'border: 2px solid var(--color-secondary) !important; background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(17, 24, 39, 0.8) 100%);' : '' }}">
                 @if($currentPlan === 'premium_plus')
-                    <span class="position-absolute top-0 end-0 bg-success text-white px-3 py-1 rounded-bl-lg small fw-bold" style="border-bottom-left-radius: 12px; border-top-right-radius: 15px;">Aktif</span>
+                    <span class="position-absolute top-0 end-0 bg-success text-heading px-3 py-1 rounded-bl-lg small fw-bold" style="border-bottom-left-radius: 12px; border-top-right-radius: 15px;">Aktif</span>
                 @else
                     <span class="position-absolute top-0 end-0 bg-warning text-dark px-3 py-1 rounded-bl-lg small fw-bold" style="border-bottom-left-radius: 12px; border-top-right-radius: 15px; background-color: var(--color-warning) !important;">Terpopuler</span>
                 @endif
                 <div class="mb-3">
                     <span class="badge bg-secondary-subtle text-secondary px-3 py-1 rounded-pill mb-2" style="background-color: rgba(139, 92, 246, 0.15); color: var(--color-secondary) !important;">Premium Plus</span>
-                    <h3 class="text-white mb-0 fw-bold"><span id="price-premium-plus">Rp39.900</span> <span class="fs-6 text-secondary" id="label-premium-plus">/bln</span></h3>
+                    <h3 class="mb-0 fw-bold"><span id="price-premium-plus">Rp39.900</span> <span class="fs-6 text-secondary" id="label-premium-plus">/bln</span></h3>
                     <p class="text-secondary small mt-2">Akses super eksklusif untuk persiapan ujian maksimal.</p>
                 </div>
                 
@@ -134,7 +134,7 @@
 
     <!-- Feature Comparison Table -->
     <div class="glass-card p-4 mt-5">
-        <h4 class="fw-bold mb-4 text-center text-white"><i class="fa-solid fa-table-list text-primary me-2"></i> Tabel Perbandingan Fitur</h4>
+        <h4 class="fw-bold mb-4 text-center"><i class="fa-solid fa-table-list text-primary me-2"></i> Tabel Perbandingan Fitur</h4>
         <div class="table-responsive">
             <table class="table table-dark table-hover align-middle border border-secondary-subtle mb-0" style="border-radius:12px; overflow:hidden;">
                 <thead>
@@ -197,13 +197,13 @@
 <!-- Mock Payment Modal -->
 <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-white" style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); backdrop-filter: var(--glass-blur); border-radius: 16px;">
+        <div class="modal-content text-heading" style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); backdrop-filter: var(--glass-blur); border-radius: 16px;">
             <div class="modal-header border-secondary-subtle">
                 <h5 class="modal-title fw-bold"><i class="fa-solid fa-credit-card text-primary me-2"></i>Metode Pembayaran</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body py-4">
-                <h6 class="mb-1 text-white fw-bold">Konfirmasi Upgrade Keanggotaan</h6>
+                <h6 class="mb-1 fw-bold">Konfirmasi Upgrade Keanggotaan</h6>
                 <p class="text-secondary small mb-3" id="payment-text">Anda akan membeli paket seharga Rp0.</p>
 
                 <!-- Payment Methods Tabs -->
@@ -212,10 +212,10 @@
                         <button class="nav-link active text-white" id="qris-tab" data-bs-toggle="tab" data-bs-target="#qris-pay" type="button" role="tab" aria-controls="qris-pay" aria-selected="true"><i class="fa-solid fa-qrcode me-1"></i> QRIS</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link text-white" id="va-tab" data-bs-toggle="tab" data-bs-target="#va-pay" type="button" role="tab" aria-controls="va-pay" aria-selected="false"><i class="fa-solid fa-building me-1"></i> VA</button>
+                        <button class="nav-link text-heading" id="va-tab" data-bs-toggle="tab" data-bs-target="#va-pay" type="button" role="tab" aria-controls="va-pay" aria-selected="false"><i class="fa-solid fa-building me-1"></i> VA</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link text-white" id="wallet-tab" data-bs-toggle="tab" data-bs-target="#wallet-pay" type="button" role="tab" aria-controls="wallet-pay" aria-selected="false"><i class="fa-solid fa-wallet me-1"></i> E-Wallet</button>
+                        <button class="nav-link text-heading" id="wallet-tab" data-bs-toggle="tab" data-bs-target="#wallet-pay" type="button" role="tab" aria-controls="wallet-pay" aria-selected="false"><i class="fa-solid fa-wallet me-1"></i> E-Wallet</button>
                     </li>
                 </ul>
                 <div class="tab-content text-start mb-4" id="paymentTabContent">
@@ -233,7 +233,7 @@
                     <!-- VA -->
                     <div class="tab-pane fade py-2" id="va-pay" role="tabpanel" aria-labelledby="va-tab">
                         <label class="form-label text-secondary small">Pilih Bank Penerima</label>
-                        <select class="form-select text-white mb-3" style="background-color: var(--input-bg);" id="va-bank-select" onchange="updateVaNumber(this.value)">
+                        <select class="form-select text-heading mb-3" style="background-color: var(--input-bg);" id="va-bank-select" onchange="updateVaNumber(this.value)">
                             <option value="bca">Bank Central Asia (BCA)</option>
                             <option value="mandiri">Bank Mandiri</option>
                             <option value="bni">Bank Negara Indonesia (BNI)</option>
@@ -242,7 +242,7 @@
                         <div class="p-3 rounded-3 mb-2" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
                             <span class="small text-secondary d-block">Nomor Virtual Account</span>
                             <div class="d-flex justify-content-between align-items-center mt-1">
-                                <strong class="text-white fs-5" id="va-number">880120982347910</strong>
+                                <strong class="fs-5" id="va-number">880120982347910</strong>
                                 <button type="button" class="btn btn-sm btn-outline-light py-0.5 px-2" onclick="copyVaNumber()"><i class="fa-regular fa-copy"></i> Salin</button>
                             </div>
                         </div>
@@ -263,7 +263,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label text-secondary small">Nomor Handphone</label>
-                            <input type="tel" class="form-control text-white" style="background-color: var(--input-bg);" id="wallet-phone" placeholder="08xxxxxxxxxx" value="081234567890">
+                            <input type="tel" class="form-control text-heading" style="background-color: var(--input-bg);" id="wallet-phone" placeholder="08xxxxxxxxxx" value="081234567890">
                         </div>
                         <button type="button" class="btn btn-sm btn-outline-primary w-100 py-2" onclick="triggerWalletNotification()"><i class="fa-solid fa-bell me-1"></i> Kirim Notifikasi Tagihan</button>
                     </div>

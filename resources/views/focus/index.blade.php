@@ -20,7 +20,7 @@
                 </div>
 
                 <!-- Timer Display -->
-                <div class="display-1 fw-bold mb-5 text-white" id="main-timer" style="font-family: var(--font-heading); font-size: 6.5rem; letter-spacing: -0.02em;">25:00</div>
+                <div class="display-1 fw-bold mb-5 text-heading" id="main-timer" style="font-family: var(--font-heading); font-size: 6.5rem; letter-spacing: -0.02em;">25:00</div>
 
                 <!-- Controls -->
                 <div class="d-flex justify-content-center gap-3">
@@ -34,13 +34,13 @@
                 <div class="col-6">
                     <div class="glass-card p-4 text-center">
                         <h6 class="text-secondary mb-2">Total Sesi Fokus</h6>
-                        <h3 class="text-white mb-0 fw-bold">{{ $sessionsCount }}</h3>
+                        <h3 class="mb-0 fw-bold">{{ $sessionsCount }}</h3>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="glass-card p-4 text-center">
                         <h6 class="text-secondary mb-2">Total Menit Fokus</h6>
-                        <h3 class="text-white mb-0 fw-bold">{{ $totalFocusMinutes }} m</h3>
+                        <h3 class="mb-0 fw-bold">{{ $totalFocusMinutes }} m</h3>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
         <!-- Leaderboard Sidebar -->
         <div class="col-lg-4">
             <div class="glass-card p-4 h-100">
-                <h5 class="fw-bold mb-4 text-white"><i class="fa-solid fa-ranking-star text-warning me-2"></i>Leaderboard Mahasiswa</h5>
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-ranking-star text-warning me-2"></i>Leaderboard Mahasiswa</h5>
                 
                 <div class="d-flex flex-column gap-3">
                     @foreach($leaderboard as $index => $u)
@@ -68,7 +68,7 @@
                                 </span>
                                 <img src="{{ $u->foto_profil_url }}" alt="Avatar" class="rounded-circle" style="width:36px; height:36px; object-fit:cover; border: 1px solid rgba(255,255,255,0.1);">
                                 <div class="overflow-hidden">
-                                    <div class="text-white text-truncate fw-medium" style="font-size:0.9rem;">{{ $u->name }}</div>
+                                    <div class="text-heading text-truncate fw-medium" style="font-size:0.9rem;">{{ $u->name }}</div>
                                     <div class="text-secondary small">Lvl {{ $u->level }}</div>
                                 </div>
                             </div>

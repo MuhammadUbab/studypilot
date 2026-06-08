@@ -13,7 +13,7 @@
             <!-- Search bar -->
             <form action="{{ route('admin.users') }}" method="GET">
                 <div class="input-group">
-                    <input type="text" class="form-control form-control-sm bg-dark border-secondary text-white" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama atau email...">
+                    <input type="text" class="form-control form-control-sm bg-dark border-secondary text-heading" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama atau email...">
                     <button class="btn btn-primary btn-sm" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
             </form>
@@ -40,7 +40,7 @@
                             <td class="py-3 d-flex align-items-center">
                                 <img src="{{ $u->foto_profil_url }}" alt="Avatar" class="rounded-circle me-3" style="width: 40px; height: 40px; border:2px solid var(--color-primary); object-fit:cover;">
                                 <div>
-                                    <h6 class="mb-0 text-white">{{ $u->name }}</h6>
+                                    <h6 class="mb-0">{{ $u->name }}</h6>
                                     <span class="text-secondary small">{{ $u->email }}</span>
                                 </div>
                             </td>
