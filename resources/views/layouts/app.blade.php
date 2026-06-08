@@ -48,9 +48,17 @@
         <a href="{{ route('landing') }}" class="text-decoration-none fs-4 fw-bold text-white mb-0">
             <i class="fa-solid fa-paper-plane me-2 text-indigo" style="color: var(--color-primary);"></i>StudyPilot
         </a>
-        <button class="btn btn-outline-light btn-sm px-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
-            <i class="fa-solid fa-bars fs-5"></i>
-        </button>
+        <div class="d-flex align-items-center gap-2">
+            <!-- Theme toggle in header -->
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-outline-light py-1 px-2 theme-toggle-btn" data-theme-val="light" onclick="setGlobalTheme('light')"><i class="fa-solid fa-sun"></i></button>
+                <button type="button" class="btn btn-outline-light py-1 px-2 theme-toggle-btn" data-theme-val="dark" onclick="setGlobalTheme('dark')"><i class="fa-solid fa-moon"></i></button>
+                <button type="button" class="btn btn-outline-light py-1 px-2 theme-toggle-btn" data-theme-val="system" onclick="setGlobalTheme('system')"><i class="fa-solid fa-desktop"></i></button>
+            </div>
+            <button class="btn btn-outline-light btn-sm px-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
+                <i class="fa-solid fa-bars fs-5"></i>
+            </button>
+        </div>
     </header>
 
     <!-- Mobile Offcanvas Sidebar -->
@@ -62,94 +70,123 @@
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body p-0 d-flex flex-column justify-content-between">
-            <div class="p-3">
-                <ul class="sidebar-menu p-0" style="list-style: none;">
-                    @if(auth()->user()->role === 'admin')
-                        <!-- Admin Sidebar -->
-                        <li class="sidebar-item mb-2 {{ request()->is('admin') ? 'active' : '' }}">
-                            <a href="{{ route('admin.dashboard') }}" class="sidebar-link">
-                                <i class="fa-solid fa-chart-line me-3"></i>Overview
+            <div class="sidebar-scrollable flex-grow-1 overflow-y-auto w-100">
+                <div class="p-3">
+                    <ul class="sidebar-menu p-0" style="list-style: none;">
+                        @if(auth()->user()->role === 'admin')
+                            <!-- Admin Sidebar -->
+                            <li class="sidebar-item mb-2 {{ request()->is('admin') ? 'active' : '' }}">
+                                <a href="{{ route('admin.dashboard') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-chart-line me-3"></i>Overview
+                                </a>
+                            </li>
+                            <li class="sidebar-item mb-2 {{ request()->is('admin/users') ? 'active' : '' }}">
+                                <a href="{{ route('admin.users') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-users me-3"></i>User Management
+                                </a>
+                            </li>
+                            <li class="sidebar-item mb-2 {{ request()->is('admin/subscriptions') ? 'active' : '' }}">
+                                <a href="{{ route('admin.subscriptions') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-credit-card me-3"></i>Subscriptions
+                                </a>
+                            </li>
+                            <li class="sidebar-item mb-2 {{ request()->is('admin/ai-usage') ? 'active' : '' }}">
+                                <a href="{{ route('admin.ai-usage') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-brain me-3"></i>AI Usage
+                                </a>
+                            </li>
+                            <li class="sidebar-item mb-2 {{ request()->is('admin/prompts') ? 'active' : '' }}">
+                                <a href="{{ route('admin.prompts') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-terminal me-3"></i>Prompts
+                                </a>
+                            </li>
+                            <li class="sidebar-item mb-2 {{ request()->is('admin/ai-settings') ? 'active' : '' }}">
+                                <a href="{{ route('admin.ai-settings') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-sliders me-3"></i>AI Settings
+                                </a>
+                            </li>
+                        @else
+                            <!-- User/Student Sidebar -->
+                            <li class="sidebar-item mb-2 {{ request()->is('dashboard') ? 'active' : '' }}">
+                                <a href="{{ route('dashboard') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-gauge-high me-3"></i>Dashboard
+                                </a>
+                            </li>
+                            <li class="sidebar-item mb-2 {{ request()->is('tasks*') ? 'active' : '' }}">
+                                <a href="{{ route('tasks.index') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-list-check me-3"></i>Smart Tasks
+                                </a>
+                            </li>
+                            <li class="sidebar-item mb-2 {{ request()->is('study-planner*') ? 'active' : '' }}">
+                                <a href="{{ route('study-planner.index') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-calendar-week me-3"></i>Study Planner
+                                </a>
+                            </li>
+                            <li class="sidebar-item mb-2 {{ request()->is('knowledge-hub*') ? 'active' : '' }}">
+                                <a href="{{ route('knowledge-hub.index') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-book-open me-3"></i>Knowledge Hub
+                                </a>
+                            </li>
+                            <li class="sidebar-item mb-2 {{ request()->is('exam-predictor*') ? 'active' : '' }}">
+                                <a href="{{ route('exam-predictor.index') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-wand-magic-sparkles me-3"></i>Exam Predictor
+                                </a>
+                            </li>
+                            <li class="sidebar-item mb-2 {{ request()->is('focus*') ? 'active' : '' }}">
+                                <a href="{{ route('focus.index') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-clock me-3"></i>Focus Mode
+                                </a>
+                            </li>
+                            <li class="sidebar-item mb-2 {{ request()->is('habits*') ? 'active' : '' }}">
+                                <a href="{{ route('habits.index') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-circle-check me-3"></i>Habit Tracker
+                                </a>
+                            </li>
+                            <li class="sidebar-item mb-2 {{ request()->is('analytics*') ? 'active' : '' }}">
+                                <a href="{{ route('analytics.index') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-chart-pie me-3"></i>Analytics
+                                </a>
+                            </li>
+                            <li class="sidebar-item mb-2 {{ request()->is('subscription*') ? 'active' : '' }}">
+                                <a href="{{ route('subscription.index') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-gem me-3"></i>Upgrade Premium
+                                </a>
+                            </li>
+                        @endif
+                        
+                        <li class="sidebar-item mb-2 {{ request()->is('profile*') ? 'active' : '' }}">
+                            <a href="{{ route('profile.edit') }}" class="sidebar-link">
+                                <i class="fa-solid fa-user-gear me-3"></i>Pengaturan Profil
                             </a>
                         </li>
-                        <li class="sidebar-item mb-2 {{ request()->is('admin/users') ? 'active' : '' }}">
-                            <a href="{{ route('admin.users') }}" class="sidebar-link">
-                                <i class="fa-solid fa-users me-3"></i>User Management
-                            </a>
-                        </li>
-                        <li class="sidebar-item mb-2 {{ request()->is('admin/subscriptions') ? 'active' : '' }}">
-                            <a href="{{ route('admin.subscriptions') }}" class="sidebar-link">
-                                <i class="fa-solid fa-credit-card me-3"></i>Subscriptions
-                            </a>
-                        </li>
-                        <li class="sidebar-item mb-2 {{ request()->is('admin/ai-usage') ? 'active' : '' }}">
-                            <a href="{{ route('admin.ai-usage') }}" class="sidebar-link">
-                                <i class="fa-solid fa-brain me-3"></i>AI Usage
-                            </a>
-                        </li>
-                        <li class="sidebar-item mb-2 {{ request()->is('admin/prompts') ? 'active' : '' }}">
-                            <a href="{{ route('admin.prompts') }}" class="sidebar-link">
-                                <i class="fa-solid fa-terminal me-3"></i>Prompts
-                            </a>
-                        </li>
-                        <li class="sidebar-item mb-2 {{ request()->is('admin/ai-settings') ? 'active' : '' }}">
-                            <a href="{{ route('admin.ai-settings') }}" class="sidebar-link">
-                                <i class="fa-solid fa-sliders me-3"></i>AI Settings
-                            </a>
-                        </li>
-                    @else
-                        <!-- User/Student Sidebar -->
-                        <li class="sidebar-item mb-2 {{ request()->is('dashboard') ? 'active' : '' }}">
-                            <a href="{{ route('dashboard') }}" class="sidebar-link">
-                                <i class="fa-solid fa-gauge-high me-3"></i>Dashboard
-                            </a>
-                        </li>
-                        <li class="sidebar-item mb-2 {{ request()->is('tasks*') ? 'active' : '' }}">
-                            <a href="{{ route('tasks.index') }}" class="sidebar-link">
-                                <i class="fa-solid fa-list-check me-3"></i>Smart Tasks
-                            </a>
-                        </li>
-                        <li class="sidebar-item mb-2 {{ request()->is('study-planner*') ? 'active' : '' }}">
-                            <a href="{{ route('study-planner.index') }}" class="sidebar-link">
-                                <i class="fa-solid fa-calendar-week me-3"></i>Study Planner
-                            </a>
-                        </li>
-                        <li class="sidebar-item mb-2 {{ request()->is('knowledge-hub*') ? 'active' : '' }}">
-                            <a href="{{ route('knowledge-hub.index') }}" class="sidebar-link">
-                                <i class="fa-solid fa-book-open me-3"></i>Knowledge Hub
-                            </a>
-                        </li>
-                        <li class="sidebar-item mb-2 {{ request()->is('exam-predictor*') ? 'active' : '' }}">
-                            <a href="{{ route('exam-predictor.index') }}" class="sidebar-link">
-                                <i class="fa-solid fa-wand-magic-sparkles me-3"></i>Exam Predictor
-                            </a>
-                        </li>
-                        <li class="sidebar-item mb-2 {{ request()->is('focus*') ? 'active' : '' }}">
-                            <a href="{{ route('focus.index') }}" class="sidebar-link">
-                                <i class="fa-solid fa-clock me-3"></i>Focus Mode
-                            </a>
-                        </li>
-                        <li class="sidebar-item mb-2 {{ request()->is('analytics*') ? 'active' : '' }}">
-                            <a href="{{ route('analytics.index') }}" class="sidebar-link">
-                                <i class="fa-solid fa-chart-pie me-3"></i>Analytics
-                            </a>
-                        </li>
-                        <li class="sidebar-item mb-2 {{ request()->is('subscription*') ? 'active' : '' }}">
-                            <a href="{{ route('subscription.index') }}" class="sidebar-link">
-                                <i class="fa-solid fa-gem me-3"></i>Upgrade Premium
-                            </a>
-                        </li>
-                    @endif
-                    
-                    <li class="sidebar-item mb-2 {{ request()->is('profile*') ? 'active' : '' }}">
-                        <a href="{{ route('profile.edit') }}" class="sidebar-link">
-                            <i class="fa-solid fa-user-gear me-3"></i>Pengaturan Profil
-                        </a>
-                    </li>
-                </ul>
+                    </ul>
+                </div>
+                <!-- Mobile Focus Timer Widget -->
+                @if(auth()->user()->role !== 'admin')
+                <div class="sidebar-focus-widget mx-3 mb-3">
+                    <div class="focus-widget-title">Focus Session</div>
+                    <div class="focus-widget-timer text-center widget-timer-display">25:00</div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary btn-sm flex-grow-1 widget-start-btn" onclick="toggleWidgetTimer()">Mulai</button>
+                        <button class="btn btn-outline-light btn-sm widget-reset-btn" onclick="resetWidgetTimer()"><i class="fa-solid fa-rotate-right"></i></button>
+                    </div>
+                </div>
+                @endif
+                <!-- Mobile Theme Toggle Widget -->
+                <div class="px-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-center p-2.5 rounded-3" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
+                        <span class="small text-secondary fw-semibold"><i class="fa-solid fa-circle-half-stroke me-2"></i>Tema</span>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-outline-light py-0.5 px-2 theme-toggle-btn" data-theme-val="light" onclick="setGlobalTheme('light')"><i class="fa-solid fa-sun"></i></button>
+                            <button type="button" class="btn btn-outline-light py-0.5 px-2 theme-toggle-btn" data-theme-val="dark" onclick="setGlobalTheme('dark')"><i class="fa-solid fa-moon"></i></button>
+                            <button type="button" class="btn btn-outline-light py-0.5 px-2 theme-toggle-btn" data-theme-val="system" onclick="setGlobalTheme('system')"><i class="fa-solid fa-desktop"></i></button>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div class="user-card-sm border-top" style="border-color: var(--border-color);">
-                <img src="{{ auth()->user()->foto_profil ? asset(auth()->user()->foto_profil) : 'https://api.dicebear.com/7.x/adventurer/svg?seed=' . urlencode(auth()->user()->name) }}" alt="Foto Profil" class="user-avatar-sm">
+                <img src="{{ auth()->user()->foto_profil_url }}" alt="Foto Profil" class="user-avatar-sm">
                 <div class="overflow-hidden flex-grow-1">
                     <div class="user-name-sm text-truncate">{{ auth()->user()->name }}</div>
                     <div class="user-role-sm text-capitalize">{{ auth()->user()->role === 'admin' ? 'Administrator' : 'Mahasiswa' }}</div>
@@ -165,105 +202,124 @@
                 <i class="fa-solid fa-paper-plane me-2 text-indigo"></i>StudyPilot
             </a>
             
-            <ul class="sidebar-menu">
-                @if(auth()->user()->role === 'admin')
-                    <!-- Admin Sidebar -->
-                    <li class="sidebar-item {{ request()->is('admin') ? 'active' : '' }}">
-                        <a href="{{ route('admin.dashboard') }}" class="sidebar-link">
-                            <i class="fa-solid fa-chart-line"></i>Overview
+            <div class="sidebar-scrollable flex-grow-1 overflow-y-auto px-0 w-100">
+                <ul class="sidebar-menu">
+                    @if(auth()->user()->role === 'admin')
+                        <!-- Admin Sidebar -->
+                        <li class="sidebar-item {{ request()->is('admin') ? 'active' : '' }}">
+                            <a href="{{ route('admin.dashboard') }}" class="sidebar-link">
+                                <i class="fa-solid fa-chart-line"></i>Overview
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ request()->is('admin/users') ? 'active' : '' }}">
+                            <a href="{{ route('admin.users') }}" class="sidebar-link">
+                                <i class="fa-solid fa-users"></i>User Management
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ request()->is('admin/subscriptions') ? 'active' : '' }}">
+                            <a href="{{ route('admin.subscriptions') }}" class="sidebar-link">
+                                <i class="fa-solid fa-credit-card"></i>Subscriptions
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ request()->is('admin/ai-usage') ? 'active' : '' }}">
+                            <a href="{{ route('admin.ai-usage') }}" class="sidebar-link">
+                                <i class="fa-solid fa-brain"></i>AI Usage
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ request()->is('admin/prompts') ? 'active' : '' }}">
+                            <a href="{{ route('admin.prompts') }}" class="sidebar-link">
+                                <i class="fa-solid fa-terminal"></i>Prompts
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ request()->is('admin/ai-settings') ? 'active' : '' }}">
+                            <a href="{{ route('admin.ai-settings') }}" class="sidebar-link">
+                                <i class="fa-solid fa-sliders"></i>AI Settings
+                            </a>
+                        </li>
+                    @else
+                        <!-- User/Student Sidebar -->
+                        <li class="sidebar-item {{ request()->is('dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard') }}" class="sidebar-link">
+                                <i class="fa-solid fa-gauge-high"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ request()->is('tasks*') ? 'active' : '' }}">
+                            <a href="{{ route('tasks.index') }}" class="sidebar-link">
+                                <i class="fa-solid fa-list-check"></i>Smart Tasks
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ request()->is('study-planner*') ? 'active' : '' }}">
+                            <a href="{{ route('study-planner.index') }}" class="sidebar-link">
+                                <i class="fa-solid fa-calendar-week"></i>Study Planner
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ request()->is('knowledge-hub*') ? 'active' : '' }}">
+                            <a href="{{ route('knowledge-hub.index') }}" class="sidebar-link">
+                                <i class="fa-solid fa-book-open"></i>Knowledge Hub
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ request()->is('exam-predictor*') ? 'active' : '' }}">
+                            <a href="{{ route('exam-predictor.index') }}" class="sidebar-link">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>Exam Predictor
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ request()->is('focus*') ? 'active' : '' }}">
+                            <a href="{{ route('focus.index') }}" class="sidebar-link">
+                                <i class="fa-solid fa-clock"></i>Focus Mode
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ request()->is('habits*') ? 'active' : '' }}">
+                            <a href="{{ route('habits.index') }}" class="sidebar-link">
+                                <i class="fa-solid fa-circle-check"></i>Habit Tracker
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ request()->is('analytics*') ? 'active' : '' }}">
+                            <a href="{{ route('analytics.index') }}" class="sidebar-link">
+                                <i class="fa-solid fa-chart-pie"></i>Analytics
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ request()->is('subscription*') ? 'active' : '' }}">
+                            <a href="{{ route('subscription.index') }}" class="sidebar-link">
+                                <i class="fa-solid fa-gem"></i>Upgrade Premium
+                            </a>
+                        </li>
+                    @endif
+                    
+                    <li class="sidebar-item {{ request()->is('profile*') ? 'active' : '' }}">
+                        <a href="{{ route('profile.edit') }}" class="sidebar-link">
+                            <i class="fa-solid fa-user-gear"></i>Pengaturan Profil
                         </a>
                     </li>
-                    <li class="sidebar-item {{ request()->is('admin/users') ? 'active' : '' }}">
-                        <a href="{{ route('admin.users') }}" class="sidebar-link">
-                            <i class="fa-solid fa-users"></i>User Management
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->is('admin/subscriptions') ? 'active' : '' }}">
-                        <a href="{{ route('admin.subscriptions') }}" class="sidebar-link">
-                            <i class="fa-solid fa-credit-card"></i>Subscriptions
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->is('admin/ai-usage') ? 'active' : '' }}">
-                        <a href="{{ route('admin.ai-usage') }}" class="sidebar-link">
-                            <i class="fa-solid fa-brain"></i>AI Usage
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->is('admin/prompts') ? 'active' : '' }}">
-                        <a href="{{ route('admin.prompts') }}" class="sidebar-link">
-                            <i class="fa-solid fa-terminal"></i>Prompts
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->is('admin/ai-settings') ? 'active' : '' }}">
-                        <a href="{{ route('admin.ai-settings') }}" class="sidebar-link">
-                            <i class="fa-solid fa-sliders"></i>AI Settings
-                        </a>
-                    </li>
-                @else
-                    <!-- User/Student Sidebar -->
-                    <li class="sidebar-item {{ request()->is('dashboard') ? 'active' : '' }}">
-                        <a href="{{ route('dashboard') }}" class="sidebar-link">
-                            <i class="fa-solid fa-gauge-high"></i>Dashboard
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->is('tasks*') ? 'active' : '' }}">
-                        <a href="{{ route('tasks.index') }}" class="sidebar-link">
-                            <i class="fa-solid fa-list-check"></i>Smart Tasks
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->is('study-planner*') ? 'active' : '' }}">
-                        <a href="{{ route('study-planner.index') }}" class="sidebar-link">
-                            <i class="fa-solid fa-calendar-week"></i>Study Planner
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->is('knowledge-hub*') ? 'active' : '' }}">
-                        <a href="{{ route('knowledge-hub.index') }}" class="sidebar-link">
-                            <i class="fa-solid fa-book-open"></i>Knowledge Hub
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->is('exam-predictor*') ? 'active' : '' }}">
-                        <a href="{{ route('exam-predictor.index') }}" class="sidebar-link">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i>Exam Predictor
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->is('focus*') ? 'active' : '' }}">
-                        <a href="{{ route('focus.index') }}" class="sidebar-link">
-                            <i class="fa-solid fa-clock"></i>Focus Mode
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->is('analytics*') ? 'active' : '' }}">
-                        <a href="{{ route('analytics.index') }}" class="sidebar-link">
-                            <i class="fa-solid fa-chart-pie"></i>Analytics
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->is('subscription*') ? 'active' : '' }}">
-                        <a href="{{ route('subscription.index') }}" class="sidebar-link">
-                            <i class="fa-solid fa-gem"></i>Upgrade Premium
-                        </a>
-                    </li>
-                @endif
-                
-                <li class="sidebar-item {{ request()->is('profile*') ? 'active' : '' }}">
-                    <a href="{{ route('profile.edit') }}" class="sidebar-link">
-                        <i class="fa-solid fa-user-gear"></i>Pengaturan Profil
-                    </a>
-                </li>
-            </ul>
+                </ul>
 
-            <!-- Permanent Sidebar Focus Timer Widget -->
-            @if(auth()->user()->role !== 'admin')
-            <div class="sidebar-focus-widget">
-                <div class="focus-widget-title">Focus Session</div>
-                <div class="focus-widget-timer text-center" id="widget-timer">25:00</div>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-primary btn-sm flex-grow-1" id="widget-start-btn" onclick="toggleWidgetTimer()">Mulai</button>
-                    <button class="btn btn-outline-light btn-sm" id="widget-reset-btn" onclick="resetWidgetTimer()"><i class="fa-solid fa-rotate-right"></i></button>
+                <!-- Permanent Sidebar Focus Timer Widget -->
+                @if(auth()->user()->role !== 'admin')
+                <div class="sidebar-focus-widget">
+                    <div class="focus-widget-title">Focus Session</div>
+                    <div class="focus-widget-timer text-center widget-timer-display">25:00</div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary btn-sm flex-grow-1 widget-start-btn" onclick="toggleWidgetTimer()">Mulai</button>
+                        <button class="btn btn-outline-light btn-sm widget-reset-btn" onclick="resetWidgetTimer()"><i class="fa-solid fa-rotate-right"></i></button>
+                    </div>
+                </div>
+                @endif
+
+                <!-- Global Theme Toggle Widget -->
+                <div class="px-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-center p-2.5 rounded-3" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
+                        <span class="small text-secondary fw-semibold"><i class="fa-solid fa-circle-half-stroke me-2"></i>Tema</span>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-outline-light py-0.5 px-2 theme-toggle-btn" data-theme-val="light" onclick="setGlobalTheme('light')"><i class="fa-solid fa-sun"></i></button>
+                            <button type="button" class="btn btn-outline-light py-0.5 px-2 theme-toggle-btn" data-theme-val="dark" onclick="setGlobalTheme('dark')"><i class="fa-solid fa-moon"></i></button>
+                            <button type="button" class="btn btn-outline-light py-0.5 px-2 theme-toggle-btn" data-theme-val="system" onclick="setGlobalTheme('system')"><i class="fa-solid fa-desktop"></i></button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            @endif
 
             <!-- Logged-in User Profile Card -->
             <div class="user-card-sm">
-                <img src="{{ auth()->user()->foto_profil ? asset(auth()->user()->foto_profil) : 'https://api.dicebear.com/7.x/adventurer/svg?seed=' . urlencode(auth()->user()->name) }}" alt="Foto Profil" class="user-avatar-sm">
+                <img src="{{ auth()->user()->foto_profil_url }}" alt="Foto Profil" class="user-avatar-sm">
                 <div class="overflow-hidden flex-grow-1">
                     <div class="user-name-sm text-truncate">{{ auth()->user()->name }}</div>
                     <div class="user-role-sm text-capitalize">{{ auth()->user()->role === 'admin' ? 'Administrator' : 'Mahasiswa' }}</div>
@@ -326,23 +382,27 @@
         function updateWidgetDisplay() {
             let minutes = Math.floor(widgetTimeRemaining / 60);
             let seconds = widgetTimeRemaining % 60;
-            document.getElementById('widget-timer').innerText = 
-                (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+            const timeStr = (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+            document.querySelectorAll('.widget-timer-display').forEach(el => el.innerText = timeStr);
         }
 
         function toggleWidgetTimer() {
-            const btn = document.getElementById('widget-start-btn');
+            const btns = document.querySelectorAll('.widget-start-btn');
             if (widgetIsRunning) {
                 // Pause
                 clearInterval(widgetTimerInterval);
                 widgetIsRunning = false;
-                btn.innerText = 'Lanjutkan';
-                btn.classList.replace('btn-secondary', 'btn-primary');
+                btns.forEach(btn => {
+                    btn.innerText = 'Lanjutkan';
+                    btn.classList.replace('btn-secondary', 'btn-primary');
+                });
             } else {
                 // Start
                 widgetIsRunning = true;
-                btn.innerText = 'Jeda';
-                btn.classList.replace('btn-primary', 'btn-secondary');
+                btns.forEach(btn => {
+                    btn.innerText = 'Jeda';
+                    btn.classList.replace('btn-primary', 'btn-secondary');
+                });
                 
                 widgetTimerInterval = setInterval(() => {
                     if (widgetTimeRemaining > 0) {
@@ -384,11 +444,79 @@
             widgetIsRunning = false;
             widgetTimeRemaining = 25 * 60;
             updateWidgetDisplay();
-            const btn = document.getElementById('widget-start-btn');
-            btn.innerText = 'Mulai';
-            btn.classList.remove('btn-secondary');
-            btn.classList.add('btn-primary');
+            document.querySelectorAll('.widget-start-btn').forEach(btn => {
+                btn.innerText = 'Mulai';
+                btn.classList.remove('btn-secondary');
+                btn.classList.add('btn-primary');
+            });
         }
+
+        // Global Theme Toggle Logic
+        function setGlobalTheme(theme) {
+            localStorage.setItem('theme_preference', theme);
+            
+            let themeToApply = theme;
+            if (theme === 'system') {
+                themeToApply = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-theme', themeToApply);
+
+            // Update visual active state of theme toggle buttons
+            updateThemeToggleButtons(theme);
+
+            // Sync with profile edit dropdown if it exists on page
+            const profileThemeSelect = document.getElementById('theme_preference');
+            if (profileThemeSelect) {
+                profileThemeSelect.value = theme;
+            }
+
+            // Save to database via Fetch API
+            fetch("{{ route('profile.theme') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSR-Token": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ theme_preference: theme })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        timerProgressBar: false
+                    });
+                    Toast.fire({
+                        icon: 'success',
+                        title: data.message
+                    });
+                }
+            })
+            .catch(err => console.error("Gagal mengupdate tema di database", err));
+        }
+
+        function updateThemeToggleButtons(activeTheme) {
+            document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+                if (btn.getAttribute('data-theme-val') === activeTheme) {
+                    btn.classList.remove('btn-outline-light');
+                    btn.classList.add('btn-primary');
+                    btn.style.color = '#ffffff';
+                } else {
+                    btn.classList.remove('btn-primary');
+                    btn.classList.add('btn-outline-light');
+                    btn.style.color = '';
+                }
+            });
+        }
+
+        // Set active buttons state on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPref = localStorage.getItem('theme_preference') || 'system';
+            updateThemeToggleButtons(currentPref);
+        });
     </script>
     @yield('scripts')
 </body>

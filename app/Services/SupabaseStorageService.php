@@ -70,12 +70,7 @@ class SupabaseStorageService
      */
     protected function saveLocal($file, string $folder, string $filename): string
     {
-        $destinationPath = public_path('uploads/' . $folder);
-        if (!File::exists($destinationPath)) {
-            File::makeDirectory($destinationPath, 0755, true, true);
-        }
-
-        $file->move($destinationPath, $filename);
-        return 'uploads/' . $folder . '/' . $filename;
+        $path = $file->storeAs($folder, $filename, 'public');
+        return 'storage/' . $path;
     }
 }

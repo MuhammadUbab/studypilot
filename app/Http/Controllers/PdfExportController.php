@@ -7,6 +7,7 @@ use App\Models\Quiz;
 use App\Models\ExamPrediction;
 use App\Models\Task;
 use App\Models\FocusSession;
+use App\Models\StudySession;
 use App\Helpers\MarkdownHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,44 +44,44 @@ class PdfExportController extends Controller
         $title = "AI Study Planner - Rencana Jadwal Belajar";
         $date = Carbon::now()->translatedFormat('d F Y H:i');
 
-        // Fetch active tasks to build structured planner
-        $tasks = Task::where('user_id', $user->id)
-            ->where('status', '!=', 'completed')
-            ->orderBy('deadline', 'asc')
-            ->get();
+        $sessions = StudySession::where('user_id', $user->id)
+            ->with('task')
+            ->get()
+            ->groupBy('hari');
 
-        $htmlContent = "<h3>Rencana Jadwal Belajar Harian & Mingguan</h3>";
-        $htmlContent .= "<p>Jadwal belajar ini dihasilkan secara cerdas oleh kecerdasan buatan StudyPilot berdasarkan daftar tugas aktif Anda dan tingkat urgensi (prioritas/deadline).</p>";
+        $htmlContent = "<h3>Rencana Jadwal Belajar Mingguan</h3>";
+        $htmlContent .= "<p>Jadwal belajar ini dihasilkan secara cerdas oleh AI StudyPilot dan disesuaikan oleh pengguna berdasarkan slot waktu aktif.</p>";
         
-        if ($tasks->isEmpty()) {
+        if ($sessions->isEmpty()) {
             $htmlContent .= "<blockquote style='border-left: 3px solid #6b7280; background: #f9fafb; padding: 10px; margin-top: 15px;'>";
-            $htmlContent .= "Tidak ada tugas aktif terdaftar. Silakan tambahkan tugas Anda di modul Smart Tasks untuk menyusun rencana belajar otomatis.";
+            $htmlContent .= "Belum ada sesi belajar aktif terdaftar. Silakan buat rencana belajar AI di modul Study Planner terlebih dahulu.";
             $htmlContent .= "</blockquote>";
         } else {
             $htmlContent .= "<table class='data-table'>";
-            $htmlContent .= "<thead><tr><th style='width: 25%;'>Hari / Sesi</th><th style='width: 40%;'>Tugas / Topik Review</th><th style='width: 15%;'>Prioritas</th><th style='width: 20%;'>Tenggat Waktu</th></tr></thead>";
+            $htmlContent .= "<thead><tr><th style='width: 20%;'>Hari</th><th style='width: 40%;'>Sesi Belajar</th><th style='width: 20%;'>Waktu Sesi</th><th style='width: 20%;'>Status</th></tr></thead>";
             $htmlContent .= "<tbody>";
             
             $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-            $times = ['09:00 - 11:30 (Sesi Pagi)', '13:30 - 15:30 (Sesi Siang)', '19:00 - 21:00 (Sesi Malam)'];
-            
-            $taskIndex = 0;
             foreach ($days as $day) {
-                foreach ($times as $time) {
-                    if ($taskIndex < count($tasks)) {
-                        $task = $tasks[$taskIndex];
-                        $priorityColor = $task->prioritas === 'high' ? 'color: #ef4444; font-weight: bold;' : ($task->prioritas === 'medium' ? 'color: #f59e0b;' : 'color: #10b981;');
-                        $deadlineStr = $task->deadline ? $task->deadline->translatedFormat('d M Y H:i') : '-';
-                        
-                        $htmlContent .= "<tr>";
-                        $htmlContent .= "<td><strong>{$day}</strong><br><small style='color: #555;'>{$time}</small></td>";
-                        $htmlContent .= "<td><strong>{$task->judul}</strong><br><small style='color: #666;'>Materi review, pengerjaan sub-tugas, & simulasi soal</small></td>";
-                        $htmlContent .= "<td style='{$priorityColor}'>" . strtoupper($task->prioritas) . "</td>";
-                        $htmlContent .= "<td>{$deadlineStr}</td>";
-                        $htmlContent .= "</tr>";
-                        
-                        $taskIndex++;
+                $daySessions = $sessions->get($day) ?? collect();
+                $daySessions = $daySessions->sortBy('waktu_mulai');
+                
+                if ($daySessions->isEmpty()) {
+                    continue;
+                }
+                
+                foreach ($daySessions as $index => $session) {
+                    $statusStr = $session->is_completed ? "<span style='color: #10b981; font-weight: bold;'>SELESAI</span>" : "BELUM SELESAI";
+                    $linkedTask = $session->task ? "<br><small style='color: #6366f1;'>Tugas: {$session->task->judul}</small>" : "";
+                    
+                    $htmlContent .= "<tr>";
+                    if ($index === 0) {
+                        $htmlContent .= "<td rowspan='" . $daySessions->count() . "'><strong>{$day}</strong></td>";
                     }
+                    $htmlContent .= "<td><strong>{$session->judul}</strong>{$linkedTask}</td>";
+                    $htmlContent .= "<td>{$session->waktu_mulai} - {$session->waktu_selesai}</td>";
+                    $htmlContent .= "<td>{$statusStr}</td>";
+                    $htmlContent .= "</tr>";
                 }
             }
             $htmlContent .= "</tbody></table>";

@@ -197,24 +197,75 @@
 <!-- Mock Payment Modal -->
 <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-dark border-secondary text-white" style="border-radius:16px;">
-            <div class="modal-header border-secondary">
-                <h5 class="modal-title">Simulasi Pembayaran (Mock Payment)</h5>
+        <div class="modal-content text-white" style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); backdrop-filter: var(--glass-blur); border-radius: 16px;">
+            <div class="modal-header border-secondary-subtle">
+                <h5 class="modal-title fw-bold"><i class="fa-solid fa-credit-card text-primary me-2"></i>Metode Pembayaran</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body text-center py-4">
-                <i class="fa-solid fa-credit-card text-primary display-4 mb-3" style="color:var(--color-primary);"></i>
-                <h5 class="mb-1 text-white">Konfirmasi Upgrade Keanggotaan</h5>
-                <p class="text-secondary small mb-4" id="payment-text">Anda akan membeli paket seharga Rp0.</p>
-                
-                <div class="p-3 rounded-3 mb-4 text-start" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
-                    <div class="d-flex justify-content-between mb-2 small text-secondary">
-                        <span>Penyedia Gateway</span>
-                        <span class="text-white">MockPay MVP</span>
+            <div class="modal-body py-4">
+                <h6 class="mb-1 text-white fw-bold">Konfirmasi Upgrade Keanggotaan</h6>
+                <p class="text-secondary small mb-3" id="payment-text">Anda akan membeli paket seharga Rp0.</p>
+
+                <!-- Payment Methods Tabs -->
+                <ul class="nav nav-tabs border-secondary-subtle mb-3" id="paymentTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active text-white" id="qris-tab" data-bs-toggle="tab" data-bs-target="#qris-pay" type="button" role="tab" aria-controls="qris-pay" aria-selected="true"><i class="fa-solid fa-qrcode me-1"></i> QRIS</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link text-white" id="va-tab" data-bs-toggle="tab" data-bs-target="#va-pay" type="button" role="tab" aria-controls="va-pay" aria-selected="false"><i class="fa-solid fa-building me-1"></i> VA</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link text-white" id="wallet-tab" data-bs-toggle="tab" data-bs-target="#wallet-pay" type="button" role="tab" aria-controls="wallet-pay" aria-selected="false"><i class="fa-solid fa-wallet me-1"></i> E-Wallet</button>
+                    </li>
+                </ul>
+                <div class="tab-content text-start mb-4" id="paymentTabContent">
+                    <!-- QRIS -->
+                    <div class="tab-pane fade show active text-center py-2" id="qris-pay" role="tabpanel" aria-labelledby="qris-tab">
+                        <div class="d-inline-block p-2 bg-white rounded-3 mb-2">
+                            <svg width="150" height="150" viewBox="0 0 29 29" style="background:#fff; padding: 2px;">
+                                <path d="M0 0h7v7H0zm22 0h7v7h-7zM0 22h7v7H0z" fill="#000"/>
+                                <path d="M2 2h3v3H2zm20 0h3v3h-3zM2 24h3v3H2z" fill="#fff"/>
+                                <path d="M9 1h2v2H9zm4 0h1v1h-1zm3 0h3v1h-3zm0 2h1v2h-1zm-3 2h2v1h-2zm6 1h2v3h-2zm-6 2h1v1h-1zm3 1h1v2h-1zm-6 3h2v1h-2zm9 0h2v2h-2zm-6 2h1v1h-1zm9 1h1v1h-1zm-3 2h2v1h-2zm-6 1h1v2h-1zm6 1h3v1h-3z" fill="#000"/>
+                            </svg>
+                        </div>
+                        <p class="small text-secondary mb-0">Pindai kode QRIS di atas melalui dompet digital atau aplikasi mobile banking Anda.</p>
                     </div>
-                    <div class="d-flex justify-content-between small text-secondary">
-                        <span>Status Keamanan</span>
-                        <span class="text-success"><i class="fa-solid fa-shield-halved me-1"></i> Sandbox Securer</span>
+                    <!-- VA -->
+                    <div class="tab-pane fade py-2" id="va-pay" role="tabpanel" aria-labelledby="va-tab">
+                        <label class="form-label text-secondary small">Pilih Bank Penerima</label>
+                        <select class="form-select text-white mb-3" style="background-color: var(--input-bg);" id="va-bank-select" onchange="updateVaNumber(this.value)">
+                            <option value="bca">Bank Central Asia (BCA)</option>
+                            <option value="mandiri">Bank Mandiri</option>
+                            <option value="bni">Bank Negara Indonesia (BNI)</option>
+                            <option value="bri">Bank Rakyat Indonesia (BRI)</option>
+                        </select>
+                        <div class="p-3 rounded-3 mb-2" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
+                            <span class="small text-secondary d-block">Nomor Virtual Account</span>
+                            <div class="d-flex justify-content-between align-items-center mt-1">
+                                <strong class="text-white fs-5" id="va-number">880120982347910</strong>
+                                <button type="button" class="btn btn-sm btn-outline-light py-0.5 px-2" onclick="copyVaNumber()"><i class="fa-regular fa-copy"></i> Salin</button>
+                            </div>
+                        </div>
+                        <small class="text-secondary d-block">Lakukan transfer via mobile banking atau mesin ATM terdekat.</small>
+                    </div>
+                    <!-- E-Wallet -->
+                    <div class="tab-pane fade py-2" id="wallet-pay" role="tabpanel" aria-labelledby="wallet-tab">
+                        <label class="form-label text-secondary small">Pilih Dompet Digital</label>
+                        <div class="d-flex gap-2 mb-3">
+                            <input type="radio" class="btn-check" name="wallet_provider" id="wallet-gopay" value="GoPay" checked>
+                            <label class="btn btn-outline-light btn-sm flex-grow-1 py-2" for="wallet-gopay">GoPay</label>
+                            
+                            <input type="radio" class="btn-check" name="wallet_provider" id="wallet-ovo" value="OVO">
+                            <label class="btn btn-outline-light btn-sm flex-grow-1 py-2" for="wallet-ovo">OVO</label>
+
+                            <input type="radio" class="btn-check" name="wallet_provider" id="wallet-shopeepay" value="ShopeePay">
+                            <label class="btn btn-outline-light btn-sm flex-grow-1 py-2" for="wallet-shopeepay">ShopeePay</label>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-secondary small">Nomor Handphone</label>
+                            <input type="tel" class="form-control text-white" style="background-color: var(--input-bg);" id="wallet-phone" placeholder="08xxxxxxxxxx" value="081234567890">
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary w-100 py-2" onclick="triggerWalletNotification()"><i class="fa-solid fa-bell me-1"></i> Kirim Notifikasi Tagihan</button>
                     </div>
                 </div>
 
@@ -287,6 +338,57 @@
         
         const modal = new bootstrap.Modal(document.getElementById('paymentModal'));
         modal.show();
+    }
+
+    function updateVaNumber(bank) {
+        const numbers = {
+            bca: '880120982347910',
+            mandiri: '890220982347910',
+            bni: '881020982347910',
+            bri: '882020982347910'
+        };
+        document.getElementById('va-number').innerText = numbers[bank] || '880120982347910';
+    }
+
+    function copyVaNumber() {
+        const text = document.getElementById('va-number').innerText;
+        navigator.clipboard.writeText(text);
+        
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: false
+        });
+        Toast.fire({
+            icon: 'success',
+            title: 'Nomor VA berhasil disalin!'
+        });
+    }
+
+    function triggerWalletNotification() {
+        const phone = document.getElementById('wallet-phone').value;
+        const provider = document.querySelector('input[name="wallet_provider"]:checked').value;
+        
+        Swal.fire({
+            title: 'Mengirim Permintaan...',
+            text: `Menghubungi ${provider} di nomor ${phone}...`,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        setTimeout(() => {
+            Swal.close();
+            Swal.fire({
+                title: 'Tagihan Dikirim!',
+                text: `Permintaan pembayaran telah dikirim ke aplikasi ${provider} Anda. Silakan setujui pembayaran di HP Anda, kemudian klik tombol "Simulasikan Bayar Sukses" di bawah.`,
+                icon: 'success',
+                confirmButtonColor: '#6366f1'
+            });
+        }, 1200);
     }
 </script>
 @endsection

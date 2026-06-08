@@ -71,6 +71,22 @@ class AnalyticsController extends Controller
             $completedTasks
         ];
 
+        // 4. Study Planner Stats
+        $totalStudySessions = \App\Models\StudySession::where('user_id', $user->id)->count();
+        $completedStudySessions = \App\Models\StudySession::where('user_id', $user->id)->where('is_completed', true)->count();
+        $studySessionsCompletionRate = $totalStudySessions > 0 ? round(($completedStudySessions / $totalStudySessions) * 100) : 0;
+
+        // 5. Habit Tracker Stats
+        $habits = \App\Models\Habit::where('user_id', $user->id)->get();
+        $totalHabitsCount = $habits->count();
+        $habitsCompletedToday = 0;
+        foreach ($habits as $h) {
+            if ($h->isCompletedToday()) {
+                $habitsCompletedToday++;
+            }
+        }
+        $habitsCompletionRate = $totalHabitsCount > 0 ? round(($habitsCompletedToday / $totalHabitsCount) * 100) : 0;
+
         return view('analytics.index', compact(
             'totalTasks',
             'completedTasks',
@@ -84,7 +100,13 @@ class AnalyticsController extends Controller
             'chartFocusData',
             'chartTasksData',
             'taskStatusLabels',
-            'taskStatusData'
+            'taskStatusData',
+            'totalStudySessions',
+            'completedStudySessions',
+            'studySessionsCompletionRate',
+            'totalHabitsCount',
+            'habitsCompletedToday',
+            'habitsCompletionRate'
         ));
     }
 }

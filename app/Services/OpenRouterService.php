@@ -15,7 +15,7 @@ class OpenRouterService
 
     public function __construct()
     {
-        $this->apiKey = env('OPENROUTER_API_KEY');
+        $this->apiKey = config('services.openrouter.api_key');
     }
 
     /**
@@ -23,8 +23,8 @@ class OpenRouterService
      */
     public function generate(string $prompt, string $feature, string $systemPrompt = null)
     {
-        // Get model settings from database or fallback to .env
-        $model = PromptSetting::where('key', 'ai_default_model')->value('value') ?? env('OPENROUTER_DEFAULT_MODEL', 'deepseek/deepseek-chat');
+        // Get model settings from database or fallback to config
+        $model = PromptSetting::where('key', 'ai_default_model')->value('value') ?? config('services.openrouter.default_model');
 
         // Personalize prompt based on user's education level
         if (Auth::check()) {
@@ -62,6 +62,7 @@ class OpenRouterService
                 'model' => $model,
                 'messages' => $messages,
                 'temperature' => 0.3,
+                'max_tokens' => 2000,
             ]);
 
             if ($response->successful()) {
@@ -203,7 +204,93 @@ Materi **{$subject}** mengajarkan kita untuk berpikir sistematis dalam menguraik
         }
 
         if ($feature === 'chat_materi') {
-            return $personalizationNote . "Berdasarkan materi kuliah **{$subject}** yang Anda unggah, konsep tersebut menjelaskan bahwa optimasi dan logika terstruktur adalah kunci utama. Sistem mendeteksi bahwa pertanyaan Anda sangat relevan dengan bahasan di Bab 2 tentang komponen inti materi. Apakah ada bagian spesifik dari diagram alir atau rumus di Bab 2 yang ingin kita bedah bersama?";
+            $summaryText = "";
+            if ($systemPrompt && str_contains($systemPrompt, "RINGKASAN DOKUMEN MATERI:")) {
+                $parts = explode("RINGKASAN DOKUMEN MATERI:", $systemPrompt);
+                $summaryText = trim($parts[1] ?? "");
+            }
+
+            if (!empty($summaryText)) {
+                // Bersihkan query user
+                $query = strtolower($prompt);
+                // Tokenisasi query ke kata-kata penting
+                $stopWords = ['apakah', 'apa', 'bagaimana', 'mengapa', 'dan', 'yang', 'di', 'ke', 'dari', 'adalah', 'ini', 'itu', 'tentang', 'materi', 'kuliah', 'saya', 'tanya', 'jelaskan', 'maksud', 'arti', 'definisi', 'tolong'];
+                $words = preg_split('/[\s,\?\.\!]+/', $query);
+                $keywords = [];
+                foreach ($words as $w) {
+                    $w = trim($w);
+                    if (strlen($w) > 2 && !in_array($w, $stopWords)) {
+                        $keywords[] = $w;
+                    }
+                }
+
+                // Cari kalimat yang cocok di summary
+                $lines = preg_split('/\n+|\.\s+/', $summaryText);
+                $matches = [];
+                foreach ($lines as $line) {
+                    $line = trim($line);
+                    if (empty($line) || str_starts_with($line, '---') || str_starts_with($line, '###')) {
+                        continue;
+                    }
+                    
+                    $score = 0;
+                    foreach ($keywords as $kw) {
+                        if (str_contains(strtolower($line), $kw)) {
+                            $score++;
+                        }
+                    }
+                    if ($score > 0) {
+                        $matches[] = [
+                            'line' => $line,
+                            'score' => $score
+                        ];
+                    }
+                }
+
+                if (count($matches) > 0) {
+                    // Urutkan berdasarkan score tertinggi
+                    usort($matches, function($a, $b) {
+                        return $b['score'] <=> $a['score'];
+                    });
+
+                    // Ambil top 3 kalimat unik
+                    $selectedLines = [];
+                    foreach ($matches as $m) {
+                        $cleanLine = trim($m['line'], "*- \t");
+                        if (!in_array($cleanLine, $selectedLines) && strlen($cleanLine) > 10) {
+                            $selectedLines[] = $cleanLine;
+                            if (count($selectedLines) >= 3) break;
+                        }
+                    }
+
+                    if (count($selectedLines) > 0) {
+                        $responseBody = "Berdasarkan materi kuliah **{$subject}** yang Anda unggah, berikut penjelasan terkait pertanyaan Anda:\n\n";
+                        foreach ($selectedLines as $sl) {
+                            $responseBody .= "• " . ucfirst($sl) . ".\n";
+                        }
+                        $responseBody .= "\nApakah penjelasan ini membantu? Anda bisa menanyakan topik detail lainnya dari dokumen ini.";
+                        return $personalizationNote . $responseBody;
+                    }
+                }
+
+                // Fallback jika tidak ada keyword yang cocok, tapi ada summary
+                // Berikan ikhtisar singkat dari bab-bab atau poin penting
+                preg_match_all('/\* \*\*([^*]+)\*\*/', $summaryText, $terms);
+                $termList = array_slice($terms[1] ?? [], 0, 4);
+                
+                $responseBody = "Pertanyaan Anda tidak secara spesifik terinci di dalam ringkasan dokumen. Namun, dokumen **{$subject}** ini secara umum membahas beberapa konsep kunci:\n\n";
+                if (count($termList) > 0) {
+                    foreach ($termList as $term) {
+                        $responseBody .= "• **" . trim($term) . "**\n";
+                    }
+                } else {
+                    $responseBody .= "• Konsep dasar, paradigma implementasi, dan efisiensi sistem.\n";
+                }
+                $responseBody .= "\nAda bagian dari materi ini yang ingin Anda bedah lebih spesifik?";
+                return $personalizationNote . $responseBody;
+            }
+
+            return $personalizationNote . "Berdasarkan materi kuliah **{$subject}** yang Anda unggah, konsep tersebut menjelaskan bahwa optimasi dan logika terstruktur adalah kunci utama. Ada yang ingin didiskusikan secara khusus?";
         }
 
         return "Response simulasi AI untuk model $model pada fitur $feature.";

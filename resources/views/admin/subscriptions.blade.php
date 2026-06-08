@@ -54,7 +54,7 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ $sub->user->foto_profil ? asset($sub->user->foto_profil) : 'https://api.dicebear.com/7.x/adventurer/svg?seed=' . urlencode($sub->user->name) }}" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover; border: 1px solid var(--color-primary);">
+                                        <img src="{{ $sub->user->foto_profil_url }}" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover; border: 1px solid var(--color-primary);">
                                         <div>
                                             <div class="fw-bold text-white">{{ $sub->user->name }}</div>
                                             <small class="text-secondary">{{ $sub->user->email }}</small>

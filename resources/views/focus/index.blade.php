@@ -66,7 +66,7 @@
                                         {{ $index + 1 }}
                                     @endif
                                 </span>
-                                <img src="{{ $u->foto_profil ? asset($u->foto_profil) : 'https://api.dicebear.com/7.x/adventurer/svg?seed=' . urlencode($u->name) }}" alt="Avatar" class="rounded-circle" style="width:36px; height:36px; object-fit:cover; border: 1px solid rgba(255,255,255,0.1);">
+                                <img src="{{ $u->foto_profil_url }}" alt="Avatar" class="rounded-circle" style="width:36px; height:36px; object-fit:cover; border: 1px solid rgba(255,255,255,0.1);">
                                 <div class="overflow-hidden">
                                     <div class="text-white text-truncate fw-medium" style="font-size:0.9rem;">{{ $u->name }}</div>
                                     <div class="text-secondary small">Lvl {{ $u->level }}</div>

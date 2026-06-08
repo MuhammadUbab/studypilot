@@ -83,4 +83,32 @@ class User extends Authenticatable
     {
         return $this->hasMany(FocusSession::class);
     }
+
+    public function studySessions(): HasMany
+    {
+        return $this->hasMany(StudySession::class);
+    }
+
+    public function habits(): HasMany
+    {
+        return $this->hasMany(Habit::class);
+    }
+
+    public function getFotoProfilUrlAttribute()
+    {
+        if (!$this->foto_profil) {
+            return 'https://api.dicebear.com/7.x/adventurer/svg?seed=' . urlencode($this->name);
+        }
+
+        if (str_starts_with($this->foto_profil, 'http://') || str_starts_with($this->foto_profil, 'https://')) {
+            return $this->foto_profil;
+        }
+
+        $path = $this->foto_profil;
+        if (str_starts_with($path, 'storage/')) {
+            $path = substr($path, 8);
+        }
+
+        return asset('storage/' . $path);
+    }
 }

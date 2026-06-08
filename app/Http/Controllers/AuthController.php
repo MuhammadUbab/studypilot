@@ -177,6 +177,11 @@ class AuthController extends Controller
     {
         $user = Auth::user();
 
+        // Bersihkan input semester jika level pendidikan adalah pelajar/guru atau jika kosong
+        if (in_array($request->education_level, ['pelajar', 'guru_dosen']) || $request->semester === '') {
+            $request->merge(['semester' => null]);
+        }
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'jurusan' => ['nullable', 'string', 'max:255'],
@@ -200,16 +205,35 @@ class AuthController extends Controller
             $fileUrl = $storageService->upload($file, 'avatars');
             
             // Hapus foto profil lama jika berupa file lokal
-            if ($user->foto_profil && !str_starts_with($user->foto_profil, 'http') && file_exists(public_path($user->foto_profil))) {
-                @unlink(public_path($user->foto_profil));
+            if ($user->foto_profil && !str_starts_with($user->foto_profil, 'http')) {
+                $oldPath = str_replace('storage/', '', $user->foto_profil);
+                Storage::disk('public')->delete($oldPath);
             }
 
             $data['foto_profil'] = $fileUrl;
         }
 
-        // Update user
-        User::where('id', $user->id)->update($data);
+        // Update user secara konsisten menggunakan Eloquent
+        $user->fill($data);
+        $user->save();
 
         return back()->with('success', 'Profil Anda berhasil diperbarui!');
+    }
+
+    public function updateTheme(Request $request)
+    {
+        $request->validate([
+            'theme_preference' => ['required', 'string', 'in:system,light,dark'],
+        ]);
+
+        $user = Auth::user();
+        $user->theme_preference = $request->theme_preference;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'theme_preference' => $user->theme_preference,
+            'message' => 'Tema berhasil diperbarui secara global!',
+        ]);
     }
 }

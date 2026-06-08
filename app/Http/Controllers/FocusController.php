@@ -73,6 +73,63 @@ class FocusController extends Controller
             $newLevel++;
         }
 
+        // 4. Integrasi Habit Tracker: Otomatis centang habit "Focus Session" / "Fokus" / "Pomodoro"
+        $extraMessage = "";
+        $habit = \App\Models\Habit::where('user_id', $user->id)
+            ->where(function($query) {
+                $query->where('name', 'like', '%focus%')
+                      ->orWhere('name', 'like', '%pomodoro%')
+                      ->orWhere('name', 'like', '%fokus%');
+            })
+            ->first();
+
+        if ($habit) {
+            $today = Carbon::today();
+            $logExists = \App\Models\HabitLog::where('habit_id', $habit->id)
+                ->whereDate('completed_date', $today)
+                ->exists();
+
+            if (!$logExists) {
+                // Buat log checklist
+                \App\Models\HabitLog::create([
+                    'habit_id' => $habit->id,
+                    'completed_date' => $today,
+                ]);
+
+                $habit->update([
+                    'last_completed_at' => Carbon::now()
+                ]);
+
+                // Kalkulasi ulang streak habit
+                $habitStreak = 0;
+                $yesterday = Carbon::yesterday();
+                $hasToday = true;
+                $hasYesterday = \App\Models\HabitLog::where('habit_id', $habit->id)->whereDate('completed_date', $yesterday)->exists();
+                if ($hasToday || $hasYesterday) {
+                    $checkDate = $hasToday ? $today : $yesterday;
+                    while (true) {
+                        $exists = \App\Models\HabitLog::where('habit_id', $habit->id)->whereDate('completed_date', $checkDate)->exists();
+                        if ($exists) {
+                            $habitStreak++;
+                            $checkDate->subDay();
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                $habit->update(['streak' => $habitStreak]);
+
+                // Tambah XP tambahan dari habit (+20 XP)
+                $newXp += 20;
+                if ($newXp >= ($newLevel * 500)) {
+                    $newXp -= ($newLevel * 500);
+                    $newLevel++;
+                }
+
+                $extraMessage = " Kebiasaan '" . $habit->name . "' hari ini otomatis dicentang (+20 XP)! 🎯";
+            }
+        }
+
         // Simpan perubahan ke user
         User::where('id', $user->id)->update([
             'xp' => $newXp,
@@ -82,12 +139,12 @@ class FocusController extends Controller
 
         return response()->json([
             'success' => true,
-            'xp_gained' => $xpGained,
+            'xp_gained' => $xpGained + ($extraMessage ? 20 : 0),
             'new_xp' => $newXp,
             'new_level' => $newLevel,
             'new_streak' => $newStreak,
             'streak_increment' => $streakIncrement,
-            'message' => "Sesi fokus tersimpan! Anda mendapatkan +{$xpGained} XP!" . ($streakIncrement > 0 ? " Streak belajar Anda meningkat menjadi {$newStreak} hari! 🔥" : "")
+            'message' => "Sesi fokus tersimpan! Anda mendapatkan +{$xpGained} XP!" . ($streakIncrement > 0 ? " Streak belajar Anda meningkat menjadi {$newStreak} hari! 🔥" : "") . $extraMessage
         ]);
     }
 }

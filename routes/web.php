@@ -11,6 +11,8 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ExamPredictorController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\PdfExportController;
+use App\Http\Controllers\StudyPlannerController;
+use App\Http\Controllers\HabitController;
 use Illuminate\Support\Facades\Route;
 
 // Landing Page
@@ -40,6 +42,7 @@ Route::middleware('auth')->group(function () {
     // User Profile
     Route::get('/profile', [AuthController::class, 'editProfile'])->name('profile.edit');
     Route::post('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profile/theme', [AuthController::class, 'updateTheme'])->name('profile.theme');
 
     // User Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -53,9 +56,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/tasks/{task}/ai-prioritize', [TaskController::class, 'aiPrioritize'])->name('tasks.ai-prioritize');
 
     // AI Study Planner
-    Route::get('/study-planner', function () {
-        return view('study-planner.index');
-    })->name('study-planner.index');
+    Route::get('/study-planner', [StudyPlannerController::class, 'index'])->name('study-planner.index');
+    Route::post('/study-planner/generate', [StudyPlannerController::class, 'generate'])->name('study-planner.generate');
+    Route::post('/study-planner', [StudyPlannerController::class, 'store'])->name('study-planner.store');
+    Route::put('/study-planner/{session}', [StudyPlannerController::class, 'update'])->name('study-planner.update');
+    Route::delete('/study-planner/{session}', [StudyPlannerController::class, 'destroy'])->name('study-planner.destroy');
+    Route::post('/study-planner/{session}/toggle', [StudyPlannerController::class, 'toggleComplete'])->name('study-planner.toggle');
+
+    // Habit Tracker
+    Route::get('/habits', [HabitController::class, 'index'])->name('habits.index');
+    Route::post('/habits', [HabitController::class, 'store'])->name('habits.store');
+    Route::put('/habits/{habit}', [HabitController::class, 'update'])->name('habits.update');
+    Route::delete('/habits/{habit}', [HabitController::class, 'destroy'])->name('habits.destroy');
+    Route::post('/habits/{habit}/toggle', [HabitController::class, 'toggleComplete'])->name('habits.toggle');
 
     // Knowledge Hub
     Route::get('/knowledge-hub', [KnowledgeHubController::class, 'index'])->name('knowledge-hub.index');

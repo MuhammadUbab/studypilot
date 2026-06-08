@@ -18,7 +18,7 @@
             <!-- Foto Profil Section -->
             <div class="d-flex align-items-center mb-5 gap-4">
                 <div class="position-relative">
-                    <img src="{{ $user->foto_profil ? asset($user->foto_profil) : 'https://api.dicebear.com/7.x/adventurer/svg?seed=' . urlencode($user->name) }}" 
+                    <img src="{{ $user->foto_profil_url }}" 
                          alt="Avatar" class="rounded-circle border border-primary border-3" 
                          style="width: 100px; height: 100px; object-fit: cover;" id="avatar-preview">
                 </div>

@@ -34,7 +34,25 @@ class KnowledgeHubController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255',
             'tipe_file' => 'required|string|in:pdf,docx,pptx,youtube',
-            'file_upload' => 'required_if:tipe_file,pdf,docx,pptx|file|mimes:pdf,docx,pptx|max:10240', // Max 10MB
+            'file_upload' => [
+                'required_if:tipe_file,pdf,docx,pptx',
+                'file',
+                'max:10240', // Max 10MB
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->hasFile('file_upload')) {
+                        $file = $request->file('file_upload');
+                        $ext = strtolower($file->getClientOriginalExtension());
+                        $tipeFile = $request->input('tipe_file');
+                        if ($tipeFile === 'pdf' && $ext !== 'pdf') {
+                            $fail('Berkas yang diunggah harus berformat PDF.');
+                        } elseif ($tipeFile === 'docx' && $ext !== 'docx') {
+                            $fail('Berkas yang diunggah harus berformat DOCX.');
+                        } elseif ($tipeFile === 'pptx' && $ext !== 'pptx') {
+                            $fail('Berkas yang diunggah harus berformat PPTX.');
+                        }
+                    }
+                }
+            ],
             'youtube_url' => 'required_if:tipe_file,youtube|nullable|url',
         ]);
 

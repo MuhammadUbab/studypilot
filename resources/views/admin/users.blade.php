@@ -38,7 +38,7 @@
                     @foreach($users as $u)
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                             <td class="py-3 d-flex align-items-center">
-                                <img src="{{ $u->foto_profil ? asset($u->foto_profil) : 'https://api.dicebear.com/7.x/adventurer/svg?seed=' . urlencode($u->name) }}" alt="Avatar" class="rounded-circle me-3" style="width: 40px; height: 40px; border:2px solid var(--color-primary); object-fit:cover;">
+                                <img src="{{ $u->foto_profil_url }}" alt="Avatar" class="rounded-circle me-3" style="width: 40px; height: 40px; border:2px solid var(--color-primary); object-fit:cover;">
                                 <div>
                                     <h6 class="mb-0 text-white">{{ $u->name }}</h6>
                                     <span class="text-secondary small">{{ $u->email }}</span>
