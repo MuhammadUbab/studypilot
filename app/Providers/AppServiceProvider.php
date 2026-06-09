@@ -19,6 +19,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Log hanya query lambat (>500ms), hanya saat debug mode aktif
+        if (config('app.debug')) {
+            \Illuminate\Support\Facades\DB::listen(function ($query) {
+                if ($query->time > 500) {
+                    \Illuminate\Support\Facades\Log::warning("SLOW_QUERY (>500ms): {$query->sql} | Bindings: " . json_encode($query->bindings) . " | Time: {$query->time}ms");
+                }
+            });
+        }
     }
 }

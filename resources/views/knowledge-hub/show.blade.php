@@ -43,11 +43,6 @@
                     </a>
                 </div>
 
-                <!-- DEBUG FIELD -->
-                <div class="alert alert-warning p-2 small mb-3" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); color: var(--color-warning);">
-                    DEBUG: Length = {{ strlen($material->summary) }} | Prefix = {{ substr($material->summary, 0, 100) }}
-                </div>
-
                 <!-- Markdown Rendered Summary -->
                 <div class="text-primary-theme markdown-body" id="summary-content" style="line-height: 1.7; font-size: 0.95rem;">
                     <!-- Raw text fallback -->
